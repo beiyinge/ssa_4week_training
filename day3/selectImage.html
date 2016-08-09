@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Select Image</title>
+</head>
+<script>
+function loadDoc(url){
+	var xhttp = new XMLHttpRequest ();
+	
+	
+	xhttp.onreadystatechange = function() {
+		  if (xhttp.readyState == 4 && xhttp.status == 200) {
+				   
+		   	 var obj = JSON.parse(xhttp.responseText);
+			 };
+		 
+	}
+		 //document.getElementById("demo_parser").innerHTML = myContent;
+		 
+	
+		// document.getElementById("demo_parser").innerHTML = printElements (obj.Title);
+		 //alert (obj.Title);
+		 xhttp.open("GET", url, true);
+			xhttp.send();
+}
+//	function getSelection(){
+	function getImage(urlTarget, selection) {
+	
+		
+		
+		var xhttp = new XMLHttpRequest ();
+		
+		
+		xhttp.onreadystatechange = function() {
+			  if (xhttp.readyState == 4 && xhttp.status == 200) {
+					   
+			   	 var obj = JSON.parse(xhttp.responseText);
+				 
+				//http://localhost:8080/images/cat1.jpg
+					//description
+			//	 removeImg();
+				var printImgDiv = document.getElementById("printImgDiv"); 
+				printImgDiv.innerHTML = '';
+				
+				for ( var countObj in obj){
+					
+				   console.log ("countObj="+countObj);
+				   var imgName = (obj[countObj]).url;
+				   console.log ("imgName="+imgName);
+				   
+				   var imgDesc = (obj[countObj]).description;
+				   
+				  // printElements (imgName+": desc "+imgDecs);
+				   //addTheImage(imgName);
+				  //works 
+				//addTheImageName(imgDesc, imgName);
+				   addTheImageNameDiv (imgDesc, imgName);
+				}
+			  }
+					 
+		}
+		
+		
+		 
+		xhttp.open("GET", urlTarget+ selection, true);
+		console.log ("urlTarget+ selection"+urlTarget+ selection);
+		xhttp.send();
+	}
+	
+	function printElements(msg){
+		var ul = document.createElement('ul');
+
+		document.body.appendChild(ul);
+		
+		var li = document.createElement('li');
+	    li.innerHTML = msg;
+	    ul.appendChild(li);
+	   
+	    
+	}
+
+	function removeImg (){
+		//remove
+		
+		try {
+			var item = document.getElementById("myDiv");
+			//item.parentNode.removeChild(item);
+			console.log("item"+item[0]);
+			item.removeChild(item);
+
+			
+		}catch (err){
+			console.log ('error, ' + err);
+		}
+	}
+	function addTheImageName(imgDesc, imgName) {
+		
+		var ul = document.createElement('ul');
+
+		document.body.appendChild(ul);
+		
+		var li = document.createElement('li');
+	   
+		 li.innerHTML = imgDesc;
+		 ul.appendChild(li);
+	    var img = document.createElement('img');
+	    img.src = "http://localhost:8080/images/"+imgName;
+	    img.height = '100';
+	    img.width = '100';
+	    document.body.appendChild(img);
+	    
+	    
+	}
+
+	function enterKeyHandler (e){
+		
+		    if (!e) e = window.event;
+		    var keyCode = e.keyCode || e.which;
+		    console.log ("in enterKeyHandler" + keyCode);
+		    if (keyCode == '13'){
+		      // Enter pressed
+		      return true;
+		    }
+		  
+	}
+function addTheImageNameDiv(imgDesc, imgName) {
+	
+	
+		//var myDiv = document.createElement('div');
+		
+		//myDiv.id='myDiv';
+	    var img = document.createElement('img');
+	    img.src = "http://localhost:8080/images/"+imgName;
+	    img.height = '100';
+	    img.width = '100';
+	    //myDiv.appendChild(img);
+	    var printImgDiv = document.getElementById("printImgDiv");  
+	//    document.body.appendChild(myDiv);
+	
+
+	    printImgDiv.innerHTML += "<br><img src='http://localhost:8080/images/"+imgName+"' height=200 width=200>" + imgDesc;
+	}
+	function addTheImage(imgName) {
+		
+	
+	    var img = document.createElement('img');
+	    img.src = "http://localhost:8080/images/"+imgName;
+	    img.height = '100';
+	    img.width = '100';
+	    document.body.appendChild(img);
+	}
+	function filterImage(url){
+		var imgName=document.getElementById("inputFilter");
+	  console.log ("in filter image, " + imgName.value);
+		if (enterKeyHandler(event)){
+			getImage (url, imgName.value);
+		}
+	}
+	
+	function getImageByButton(url){
+		
+		var e = document.getElementById("imgOption");
+		var selection = e.options[e.selectedIndex].value;
+		getImage (url, selection);
+	}
+</script>
+<body>
+	
+
+	<select id="imgOption" onchange="getSelection(this);">
+	<option value="Alice">Alice</option>
+	<option value="Bob">Bob</option>
+	<option value="Carol">Carol</option>
+	<option value="David">David</option>
+	</select>
+	<button type="button" onclick="getImageByButton('http://localhost:8080/');">Get Image</button>
+	
+		
+		<hr>
+	Filter Image:<input id='inputFilter' onkeypress="filterImage('http://localhost:8080/');" value="">
+	<div id="printImgDiv"></div>
+	 
+</body>
+</html>

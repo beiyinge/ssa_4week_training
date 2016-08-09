@@ -1,0 +1,54 @@
+<html>
+<title>rock, paper, scissors</title>
+
+<script type="text/javascript">
+var optionPrompt=prompt ("Enter Rock, Paper or Scissors");
+//alert (optionPrompt);
+
+//console.log (optionPrompt);
+
+alert ("*"+optionPrompt+"*");
+
+var selection=0;
+var computer=Math.floor  (Math.random()* 3);
+
+if (optionPrompt==="rock")  
+{
+//alert ("in if rock");
+  selection=0;
+}
+else if (optionPrompt==="paper")  
+{
+  selection=1;
+}
+else if (optionPrompt==="scissor")  
+{
+  selection=2;
+}
+else
+{
+  alert ("please re-enter.");
+}
+
+
+alert("computer:"+computer);
+
+alert ("selection:"+selection);
+if (selection>computer) 
+{
+ alert ("You win.");
+}
+else if (selection<computer)  
+{
+  alert ("You lose.");
+  }
+else {
+  alert ("Tie, try again. ");
+}
+
+</script>
+<body>
+<b>Rock, paper, scissors</b>
+
+</body>
+</html>

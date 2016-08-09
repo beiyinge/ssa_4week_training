@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Ajax</title>
+</head>
+<script>
+function loadDoc(url){
+	var xhttp = new XMLHttpRequest ();
+	
+	var jsonText;
+	xhttp.onreadystatechange = function() {
+		  if (xhttp.readyState == 4 && xhttp.status == 200) {
+			// jsonText = xhttp.responseText;
+		   // document.getElementById("demo").innerHTML = xhttp.responseText;
+		   
+		    //document.getElementById("demo").innerHTML = jsonText;
+		   
+		   	 var obj = JSON.parse(xhttp.responseText);
+		   	// var obj = JSON.parse( jsonText );
+		 
+		// document.getElementById("demo_parser").innerHTML = obj.Title;
+		
+   
+		 for (var key in obj) {
+			    if (obj.hasOwnProperty(key)) {
+			      var val = obj[key];
+			      console.log(val);
+			     printElements (key+": "+val);
+			     // walk(val);
+			    }
+			 }
+		  }
+		 };
+		 
+	
+		 //document.getElementById("demo_parser").innerHTML = myContent;
+		 
+	
+		// document.getElementById("demo_parser").innerHTML = printElements (obj.Title);
+		 //alert (obj.Title);
+		 xhttp.open("GET", url, true);
+			xhttp.send();
+}
+
+function printElements(msg){
+	
+	var ul = document.createElement('ul');
+
+	document.body.appendChild(ul);
+    
+    var li = document.createElement('li');
+
+    li.innerHTML = msg;
+    ul.appendChild(li);
+   
+    
+}
+
+
+
+function parserJson(url){
+var xhttp = new XMLHttpRequest ();
+	
+	
+	xhttp.onreadystatechange = function() {
+		  if (xhttp.readyState == 4 && xhttp.status == 200) {
+		    var  jsonText = xhttp.responseText;
+		  }
+		 };
+		 
+		 xhttp.open("GET", url, true);
+		 xhttp.send();
+		 
+	var obj = JSON.parse(jsonText);
+	
+}
+</script>
+
+
+<body onload="loadDoc('http://www.omdbapi.com/?t=batman&y=&plot=short&r=json');"> 
+
+
+<hr>
+Parser Json
+<p id="demo_parser"></p>
+
+
+</body>
+
+</html>
