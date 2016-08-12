@@ -4,8 +4,10 @@
 var express = require('express');
 var sqlite3 = require('sqlite3').verbose();
 
+var Q = require ('q');
+
 var fs = require('fs');
-var filename = 'slack.db';
+var filename = 'slack_test.db';
 var dbexists = false;
 try {
     fs.accessSync(filename);
@@ -13,7 +15,7 @@ try {
 } catch (ex) {
     dbexists = false;
 }
-var db = new sqlite3.Database('slack.db');
+var db = new sqlite3.Database(filename);
 
 function createSlackTables(db){
 
@@ -64,7 +66,7 @@ function createSlackTables(db){
 	        db.run(createChannelTableSql);
 	        db.run(createChannelChatTableSql);
 	        db.run(createDirectChatTableSql);
-	        
+	        console.log ('create tables done.');
 	
 	    });
 	}
@@ -124,33 +126,59 @@ exports.insertTeamUser = function  (db, teamName, userName, descr){
  
 }
 
-exports.insertChannel = function  (db, ChannelName, teamName, descr){
+exports.insertChannel = function  (db, ChannelName, teamName, publicFlag){
 	
-	 var insertChannelSql = "INSERT INTO CHANNEL (CHANNELNAME, TEAMNAME, DESCR, DATE) " +
-    "VALUES (" + ChannelName + "," + teamName +",'2016-08-05 12:45:00');";
+	 var insertChannelSql = "INSERT INTO CHANNEL (CHANNELNAME, TEAMNAME, PUBLIC_FLAG, DATE) " +
+    "VALUES ('" + ChannelName + "','" + teamName +"', '"+ publicFlag + "','2016-08-05 12:45:00');";
 	 
  db.run(insertChannelSql);
  
 }
 	
-
+var globleData=[];
 exports.getChannels = function (db, username) { 
-	return getChannelsPrivate (db, username, function (err, jsonString) {
-	    if (err) {
-	    }
-	    console.log('getChannelsPrivate1='+jsonString);
-	}
-) ;
+
+	getChannels1 (db,username);
 	}; 
 	
-function getChannelsPrivate (db, username, callBack) {
+	function callback (err, jsonString) {
+	    if (err) {
+	    	 console.log('getChannelsPrivate1, error '+err);
+	    }
+	    else{
+	    console.log('getChannelsPrivate1='+jsonString);
+	    }
+	  //  return jsonString;
+	    
+	};
 	
-			 
+function getChannelsPrivateWrapper(db, username) {
+ 
+	 var myData =[];
+	 console.log('getChannelsPrivateWrapper 0');
+	// getChannelsPrivate (db, username,myData, callback(err,jsonString ) );
+	 getChannelsPrivate (db, username,myData, function (err, jsonString) {
+		    if (err) {
+		    }
+		    else {
+		    console.log('in getChannelsPrivateWrapper='+jsonString);
+		    myData = jsonString;
+		    }
+		    return myData;
+		});
+	 console.log ('myData='+myData);
+	return myData;
+}
+
+function getChannelsPrivate (db, username,myData, callback ) {
+	
+	 
 	var query = "SELECT CHANNEL.CHANNELNAME "+
 	" from CHANNEL inner join TEAMUSER on CHANNEL.TEAMNAME= TEAMUSER.TEAMNAME "+
 	" and TEAMUSER.username ='" + username +
 	 "' order by CHANNELNAME ASC";
-		 
+		
+	
 	//var dataNew = [];
 	   var data = [];
 	   
@@ -163,10 +191,10 @@ function getChannelsPrivate (db, username, callBack) {
 	            },
 	            function (err) {
 	               // callBack(err, JSON.stringify(data));
-	            	 callBack(err, data);
+	            	 callback(err, data);
 	            	 console.log ('in callBack='+data);
-	            	 
-	                return data;
+	            	 myData =  data;
+	                //return data;
 	            }
 	        );
 	    });
@@ -176,20 +204,86 @@ function getChannelsPrivate (db, username, callBack) {
 	  
 	}
 
-//createSlackTables(db);
-//insertDummyData (db);
+exports.channelJSONPromisePublic =  function (db, username){
+	return getChannels2 (db, username);
+	//return channelJSONPromise(db,username);
+};
+//exports.channelJSONPromisePublic = function (db, username){
 	
-var channel = getChannelsPrivate (db, 'abu',function (err, jsonString) {
-    if (err) {
-    	 console.log('getChannelsPrivate1, error '+err);
-    }
-    else{
-    console.log('getChannelsPrivate1='+jsonString);
-    }
-    return jsonString;
+	
+	function channelJSONPromise(db, username) {
+	var query = "SELECT CHANNEL.CHANNELNAME "+
+	" from CHANNEL inner join TEAMUSER on CHANNEL.TEAMNAME= TEAMUSER.TEAMNAME "+
+	" and TEAMUSER.username ='" + username +
+	 "' order by CHANNELNAME ASC";
+	
+    var channels = [];
+    return new Promise((resolve, reject) => {
+        db.serialize(function() {
+            db.each(
+                query, 
+                function(err, row) {
+                	if (err){
+                		reject(err);
+                	}
+                	else{
+                		channels.push(row.CHANNELNAME);
+                	}
+                },
+                function (err) {
+                	if (err){
+                		reject(err);
+                	}
+                	else{
+                		//resolve (JSON.stringify(channels));	
+                		resolve (channels);
+                	}
+                    
+                }
+            );
+        });
+
+    });
     
-});
+  
+}
+var fetchData = function() {
+	  var goFetch = function(users) {
+	    return http().then(function(data) {
+	      users.push(data.user);
+	      if(data.more) {
+	        return goFetch(users);
+	      } else {
+	        return users;
+	      }
+	    });
+	  }
 
-console.log ("in slaskdb.js, channel"+channel);
+	  return goFetch([]);
+	};
+	
+	function getChannels2 (db, username) {
+		var data = function (channels) {
+			return channelJSONPromise(db,username).then(
+					(val) =>{
+						 for (var i=0; i< val.length; i++){
+						 		//console.log('in for loop, '+ val[i]+'*');
+							 channels.push(val[i]);
+						 		 
+						 	 }
+						console.log('channels, '+ channels);
+						return channels;
+					}
+					);
+		}
+		
+		return data([]);
+		//Q.async (function* (db, username){ 
+			//return channelJSONPromise(db,username).then(
+			
+	};
 
-
+	//createSlackTables(db);
+	//insertDummyData (db);
+	
+	getChannels2 (db, 'abu');
