@@ -42,8 +42,6 @@
 		
 	</td>	
 	<td width="70%" valign=top>
-	  <!--div ng-include="'html/channelChats.html'"></div-->
-  		<!--div ng-controller="ChatMessageCtrl"-->
 		<table valign=top width="100%" border=0>
 		  <tr>
 		    <td>
@@ -64,15 +62,22 @@
 		   <td>
 		   {{channelMsg}}
 		   <hr>
-		   <!--div ng-controller="SaveChannelMsgCtrl"-->
-		   <div ng-show="true">
-		     Message: <input type="text" ng-model="msg"><br>
+		   <br>
+		   <div>
+				<form ng-submit="sendMessage()">
+					Message: <input type="text" ng-model="msg">
+							 <input type="submit" value="send">
+				</form>
+				<br>	
 		   </div>
 		   </td>
 		 </tr>
        </table>
 	</td>
 </tr>
+
+
+
 
 </table>
  
