@@ -44,19 +44,19 @@ app.set('port', process.env.PORT || 8080);
 
 
 app.get('/', getDefaultIndex);
-
+app.get('/:UserName', getSlackUserID);
 
 app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
 
 
-app.post('/message/', function (req, res) {
-	var message = req.body.message;
-	var channel = req.body.channel;
-	var user = req.body.user;
-	
-	res.send('done');
-	
+app.post('/message/', function(req, res) {
+    var message = req.body.message;
+    var channel = req.body.channel;
+    var user = req.body.user;
+
+    res.send('done');
+
 });
 //app.get('/tweet/:userid', followedTweet.tweet);
 
@@ -66,6 +66,29 @@ app.post('/message/', function (req, res) {
 http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+function getSlackUserID(req, res) {
+    var str = '<B>***getSlackUserID**</B>';
+    var UserName = req.params.UserName;
+    //		var tweets =  getFollowedTweets(req.params.userid );
+    // res.send(str+ getFollowedTweets(req.params.userid ).toString());
+    console.log('in getSlackUserID, username=' + UserName);
+    slackdb.getSlackUser(db, UserName).then( //done);
+        function(val) {
+            console.log('****getSlackUserID, val ' + val + '*');
+            //json
+            res.send(val);
+
+        },
+        function(err) {
+            done(err);
+        }
+
+
+    )
+};
+
 
 function getChannelByUser(req, res) {
     var str = '<B>***getChannelByUser**</B>';
@@ -92,6 +115,8 @@ function getChannelByUser(req, res) {
 };
 
 
+
+
 function getChannelChatByChannelName(req, res) {
     var str = '<B>***getChannelChatByChannelName**</B>';
     var channelName = req.params.channelName;
@@ -113,11 +138,15 @@ function getChannelChatByChannelName(req, res) {
     )
 };
 
+
+
 function getDefaultIndex(req, res) {
     console.log('in default.');
     var _dirname = 'C:\\project\\ssa4_week_training\\day8\\slackclone\\html';
     res.sendFile(_dirname + '\\Welcome.html');
 }
+
+
 
 
 

@@ -4,8 +4,8 @@ var myChannelList = [];
 menuApp.config(function($routeProvider) {
     $routeProvider.
     when('/', {
-        templateUrl: "menu.html",
-        controller: 'MenuCtrl'
+        templateUrl: "logon.html",
+        controller: 'loginCtrl'
     }).
     when('/:userName', {
         templateUrl: "all.html",
@@ -18,9 +18,56 @@ menuApp.config(function($routeProvider) {
     otherwise({
         redirectTo: '/'
     });
+}, ['$locationProvider', function($locationProvider) {
+    $locationProvider.html5Mode = true;
+}]);
+
+menuApp.factory('logon', function($http) {
+    return {
+        list: function(userName, callback) {
+            console.log(userName);
+            $http({
+                method: 'GET',
+                url: 'http://localhost:8080/' + userName,
+                cache: true
+            }).success(callback);
+        }
+    };
 });
 
+var getUserID = function($scope, logon, $location) {
+    $scope.loginUser = function() {
+        logon.list($scope.username, function(logon) {
+            var logonlist = [];
+            $scope.users = logon;
+            logonlist = logon;
+            var loggedin = false;
+            var totalUsers = $scope.users.length;
+            var usernameTyped = $scope.username;
+            var passwordTyped = $scope.password;
+            for (i = 0; i < totalUsers; i++) {
+                if (($scope.users[i].username === usernameTyped) && ($scope.users[i].password === passwordTyped)) {
+                    loggedin = true;
+                    break;
+                }
+            }
+            if (loggedin === true) {
+                $location.path("/" + $scope.users[i].username);
+            } else {
+                $location.path("/");
+            }
 
+        });
+    }
+
+
+};
+
+
+
+
+
+menuApp.controller('loginCtrl', getUserID);
 menuApp.factory('channels', function($http) {
     return {
         list: function(userName, callback) {
@@ -34,15 +81,19 @@ menuApp.factory('channels', function($http) {
 });
 
 menuApp.factory('dataService', function($http) {
-	return {
-		sendMessage: function(message, channel, user, success, failure) {
+    return {
+        sendMessage: function(message, channel, user, success, failure) {
             $http({
                 method: 'POST',
                 url: '/message/',
-				data: {message: message, channel: channel, user: user}
+                data: {
+                    message: message,
+                    channel: channel,
+                    user: user
+                }
             }).then(success, failure);
         }
-	};
+    };
 });
 
 
@@ -84,7 +135,7 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
     count = count + 1;
     console.log(count + ', in ChatMessageCtrl, ' + $routeParams.channelName);
     $scope.displayName = $routeParams.channelName;
-    
+
     console.log('in ChatMessageCtrl, myChannelList=' + myChannelList);
 
     channelChats.list($routeParams.channelName, function(channelChats) {
@@ -94,19 +145,23 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
     });
 
     $scope.sendMessage = function() {
-		console.log('message to add', $scope.msg);
-		var user = 'john'; // TODO temp hardcoded!
-		var msg = $scope.msg;
-		dataService.sendMessage($scope.msg, $routeParams.channelName, user, 
-			(response) => {
-				var newMessage = {SENDER: user, DATE: new Date().toString(), MESSAGE: msg};
-				$scope.channelChats.push(newMessage);
-			},
-			(error) => {
-				console.log("Error: server failed to add message.");
-			}
-		);
-		$scope.msg = '';
+        console.log('message to add', $scope.msg);
+        var user = 'john'; // TODO temp hardcoded!
+        var msg = $scope.msg;
+        dataService.sendMessage($scope.msg, $routeParams.channelName, user,
+            (response) => {
+                var newMessage = {
+                    SENDER: user,
+                    DATE: new Date().toString(),
+                    MESSAGE: msg
+                };
+                $scope.channelChats.push(newMessage);
+            },
+            (error) => {
+                console.log("Error: server failed to add message.");
+            }
+        );
+        $scope.msg = '';
     };
 
 });
