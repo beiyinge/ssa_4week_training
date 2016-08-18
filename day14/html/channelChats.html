@@ -1,0 +1,38 @@
+
+
+		 
+	
+		<table border=1 >
+		<tr>
+	<td width="30%">
+	menu
+
+	
+	
+		
+	</td>	
+	<td width="70%">
+	  <!--div ng-include="'html/channelChats.html'"></div-->
+  		<!--div ng-controller="ChatMessageCtrl"-->
+		 <table border=1 >
+			
+				   <tr ng-repeat="item in channelChats" >
+				   
+					<td><b>{{item.SENDER}}</b></td>
+				 
+						<td>
+						<B>{{item.MESSAGE}}</B>
+						<td>
+				  
+						<td>
+						<B> {{item.DATE}}</B>
+						<td>
+				   </tr>
+				
+				 </table>
+
+    
+	</td>
+</tr>
+
+</table>

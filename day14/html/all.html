@@ -1,0 +1,78 @@
+
+
+	<table border=1 width="100%" >
+		<tr>
+	<td width="30%" valign="top">
+
+		 <table border=0 width="100%" >
+		   <tr>
+			    <td>
+			      <B>Team name</B>
+			    
+			    <td>
+		   </tr>
+		   <tr >
+		    <td>
+				<div ng-repeat="item in channels">
+				  <a href="#/team/{{item.TEAMNAME}}">{{item.TEAMNAME}}</a>
+				</div>
+			</td>
+		   </tr>
+		    <tr>
+			    <td>
+			    <B>Channel Names</B>
+			    <td>
+		   </tr>
+		   <tr>
+        	<td>
+				<div ng-repeat="item in channels">
+				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
+				</div>
+			</td>
+		   </tr>
+		  <tr>
+			    <td>
+			      <B>Direct Message List</B>
+			    <td>
+		   </tr>
+		 </table>
+
+	
+	
+		
+	</td>	
+	<td width="70%" valign=top>
+	  <!--div ng-include="'html/channelChats.html'"></div-->
+  		<!--div ng-controller="ChatMessageCtrl"-->
+		<table valign=top width="100%" border=0>
+		  <tr>
+		    <td>
+			<B> **{{displayName}}** </B>
+		    </td>
+		 </tr>
+		 <tr>
+		 <td>
+		 
+			<div ng-repeat="item in channelChats" >
+			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
+			 <P> {{item.MESSAGE}}
+			 <hr>
+			 </div>
+         </td>
+		 </tr>
+		 <tr>
+		   <td>
+		   {{channelMsg}}
+		   <hr>
+		   <!--div ng-controller="SaveChannelMsgCtrl"-->
+		   <div ng-show="true">
+		     Message: <input type="text" ng-model="msg"><br>
+		   </div>
+		   </td>
+		 </tr>
+       </table>
+	</td>
+</tr>
+
+</table>
+ 

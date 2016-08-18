@@ -1,0 +1,25 @@
+<html ng-app="menuApp"> 
+  <head>
+    <meta charset="utf-8">
+    <title>Channel</title>
+	
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.3.1/angular-ui-router.min.js"></script>
+	   
+	<script src="js/channel.js"></script>
+  </head>
+  <body>
+  Welcome to Slack
+  <div ng-controller="MenuCtrl">
+     <div ng-controller="ChatMessageCtrl">
+		<div ng-view>
+
+		</div>
+	  </div>
+  </div>
+  <hr />
+  
+  <div> &copy;  2016</div>
+</body>
+</html>
