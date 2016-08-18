@@ -224,6 +224,50 @@ exports.channelChatJSONPromisePublic =  function (db, channelName){
 	//return channelJSONPromise(db,username);
 };
 */
+exports.getSlackUser= function getSlackUser(db, UserName) {
+		console.log("Entering getSlackUser");
+		var query = "SELECT FIRSTNAME,LASTNAME,PASSWORD,EMAIL,DATE FROM USER "
+             + "  WHERE USERNAME = '" + UserName + "'";
+console.log(query);
+        var users = [];
+		
+		return new Promise((resolve, reject) => {     
+        db.serialize(function() {
+			console.log("Entering db.serialize");
+            db.each(
+                query,
+                function(err, row) {
+					console.log("  Entering func1");
+                    if (err) {
+                        reject(err);
+                    } else {  
+						console.log("  push func1");
+						var user = {};
+						user.username  = UserName;
+						user.firstname = row.FIRSTNAME;
+						user.lastname = row.LASTNAME;
+						user.password = row.PASSWORD;
+						user.email = row.EMAIL;
+						user.date = row.DATE;
+                        users.push(user);						
+                     }
+                },
+                 function (err, nRows) {
+					console.log("  Entering func2");
+                    if (err) {
+                        reject(err);
+                    } else {                        
+						console.log("  resolve func2 rows:" + nRows);
+						console.log("  resolve func2:" + users);
+						resolve(JSON.stringify(users));
+						//resolve(users);
+                    }
+                }
+            );
+			});
+		});	
+}
+
 exports.channelJSONPromisePublic = function (db, username){
 	//function channelJSONPromise(db, username) {
 	var query = "SELECT CHANNEL.CHANNELNAME, CHANNEL.TEAMNAME "+

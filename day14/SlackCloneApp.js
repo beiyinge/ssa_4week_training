@@ -41,7 +41,7 @@ app.set('port', process.env.PORT || 8080);
 
 
 app.get('/', getDefaultIndex);
-
+app.get('/:UserName', getSlackUserID);
 
 app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
@@ -53,6 +53,28 @@ app.get('/channelChats/:channelName', getChannelChatByChannelName);
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
+
+
+
+function getSlackUserID (req, res){
+		var str = '<B>***getSlackUserID**</B>';
+		var UserName = req.params.UserName;
+//		var tweets =  getFollowedTweets(req.params.userid );
+		// res.send(str+ getFollowedTweets(req.params.userid ).toString());
+		console.log ('in getSlackUserID, username='+ UserName);
+		slackdb.getSlackUser(db, UserName).then( //done);
+				function (val) {
+					console.log('****getSlackUserID, val '+val +'*');	
+					//json
+					res.send (val);
+									
+				},
+				function (err) {
+					done(err);
+				}
+				
+			 
+		)};
 
 function getChannelByUser(req, res){
 	var str = '<B>***getChannelByUser**</B>';

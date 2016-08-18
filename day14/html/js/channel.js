@@ -4,11 +4,11 @@
 	  var myChannelList =[];
       menuApp.config(function($routeProvider) {
         $routeProvider.
-		  when('/', {                                            
-              templateUrl: "menu.html",                                               
-              controller:'MenuCtrl'  
+		   when('/', {                                            
+              templateUrl: "logon.html",                                               
+              controller:'loginCtrl'  
              }).
-		when('/:userName', {                                              
+		   when('/:userName', {                                              
 		      templateUrl: "all.html",                                               
               controller:'MenuCtrl'  
              }).
@@ -20,7 +20,58 @@
             redirectTo: '/'
           })
 		  ;
-      });
+      },[ '$locationProvider', function($locationProvider) {
+			$locationProvider.html5Mode = true;
+		}]
+	  );
+	    
+	  menuApp.factory('logon',function($http){
+		  return {
+		   list: function (userName,callback){
+			   console.log(userName);
+			$http({
+              method: 'GET',
+              url:    'http://localhost:8080/'+ userName,
+              cache: true
+            }).success(callback);
+          }
+        };
+      }
+	  );
+	  
+	  var getUserID = function ($scope,logon,$location){
+			  $scope.loginUser = function(){
+				  logon.list($scope.username,function (logon){
+			      var logonlist=[];
+			      $scope.users = logon;
+			      logonlist = logon;
+				  var loggedin = false;
+				  var totalUsers = $scope.users.length;
+				  var usernameTyped = $scope.username;
+				  var passwordTyped = $scope.password;
+				  for( i=0; i < totalUsers; i++ ) {
+					if (( $scope.users[i].username === usernameTyped )&&($scope.users[i].password === passwordTyped)) {
+							loggedin = true;
+							break;
+						}
+					}
+				  if( loggedin === true ) {
+					$location.path("/"+ $scope.users[i].username );
+					} else {
+						$location.path("/");
+					}
+
+		  });
+		  }
+		  
+				
+      }
+		  
+		  
+		 
+		 
+		  
+      menuApp.controller('loginCtrl', getUserID);
 
 	  menuApp.factory('channels', function($http){
         return {
