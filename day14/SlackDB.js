@@ -302,6 +302,41 @@ exports.channelChatJSONPromisePublic = function (db, channelName){
 	  
 	}
 	
+	// get private channels
+	exports.privateChannelsJSONPromisePublic = function (db, userName){
+		var query = "SELECT SENDER, RECIEVER, MESSAGE , DATE "+
+		" from DIRECT_CHAT where SENDER = '" + userName +"' OR RECIEVER = '" + userName + 
+		"' order by DATE asc" ;
+
+	    var channels = [];
+	    return new Promise((resolve, reject) => {
+	        db.serialize(function() {
+	            db.each(
+	                query, 
+	                function(err, row) {
+	                	if (err){
+	                		reject(err);
+	                	}
+	                	else{
+	                		channels.push(row);
+	                	}
+	                },
+	                function (err) {
+	                	if (err){
+	                		reject(err);
+	                	}
+	                	else{
+	                		resolve (JSON.stringify(channels));	
+	                	}
+	                    
+	                }
+	            );
+	        });
+
+	    });	    
+	  
+	}
+	
 	function getChannelChat (db, channelName) {
 		//var data = function () {
 		console.log('in channel_chat, ');

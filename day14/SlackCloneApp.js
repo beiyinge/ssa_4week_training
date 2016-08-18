@@ -45,6 +45,7 @@ app.get('/', getDefaultIndex);
 
 app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
+app.get('/direct/:userName', getPrivateChannelsByUserName);
 //app.get('/tweet/:userid', followedTweet.tweet);
 
 //app.get('/followedtweet', getFollowedTweets('abu'));
@@ -97,6 +98,22 @@ function getChannelByUser(req, res){
 				
 			 
 		)};
+		
+	function getPrivateChannelsByUserName (req, res){
+		var userName = req.params.userName;
+		
+		slackdb.privateChannelsJSONPromisePublic(db, userName).then(
+			function (val) {
+				console.log('****privateChannelsJSONPromisePublic, val=' + val + '*');
+				res.send(val);
+			},
+			function (err) {
+				console.log('****privateChannelsJSONPromisePublic, err=' + err + '*');
+				done(err);
+			}
+			
+		)
+	};
 
 	function getDefaultIndex(req, res){
 		console.log ('in default.');

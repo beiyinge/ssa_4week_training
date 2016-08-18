@@ -2,23 +2,24 @@
       var menuApp = angular.module('menuApp', ['ngRoute']);
       var count =1;
 	  var myChannelList =[];
+	  var myDirectList=[];
       menuApp.config(function($routeProvider) {
         $routeProvider.
-		  when('/', {                                            
-              templateUrl: "menu.html",                                               
-              controller:'MenuCtrl'  
-             }).
-		when('/:userName', {                                              
+			when('/', {                                            
+				templateUrl: "menu.html",                                               
+				controller:'MenuCtrl'  
+            }).
+			when('/:userName', {                                              
 		      templateUrl: "all.html",                                               
               controller:'MenuCtrl'  
-             }).
-		   when('/channelChats/:channelName', {
-		   templateUrl: "all.html",
-           controller: 'ChatMessageCtrl'
-          }).
-		   otherwise({
-            redirectTo: '/'
-          })
+            }).
+			when('/channelChats/:channelName', {
+				templateUrl: "all.html",
+				controller: 'ChatMessageCtrl'
+			}).
+			otherwise({
+				redirectTo: '/'
+			})
 		  ;
       });
 
@@ -30,6 +31,13 @@
               url:    'http://localhost:8080/channel/'+ userName,
               cache: true
             }).success(callback);
+          },
+		  directList: function (userName, callback){
+				$http({
+				  method: 'GET',
+				  url:    'http://localhost:8080/direct/'+ userName,
+				  cache: true
+				}).success(callback);
           }
         };
       });
@@ -44,11 +52,31 @@
 				  console.log ("***$scope.channels, " + $scope.channels);
 				  myChannelList = $scope.channels;
 				//  $scope.subviewChannelChats= "channelChats.html";
-				}
-            );
+				});
+            
+			}
+			
+			if (myDirectList.length===0) {
+				channels.directList($routeParams.userName, function(channels){
+					var directChannelSet = new Set();
+
+					for(var i = 0; i < channels.length; i++) {
+						console.log("SENDER="+channels[i].SENDER + ",RECEIVER="+channels[i].RECIEVER);
+						if (channels[i].SENDER===$routeParams.userName) {
+							directChannelSet.add(channels[i].RECIEVER);
+						} else {
+							directChannelSet.add(channels[i].SENDER);
+						}					
+					}
+					$scope.directChannels = Array.from(directChannelSet);
+					myDirectList= $scope.directChannels;
+				});
 			}	
 				
+				
+
           }
+		  
 		  
       menuApp.controller('MenuCtrl', getMenu);
       
@@ -81,17 +109,20 @@
 			  else
 				  $scope.msgBoxshowBL = false;
 			  */
-			  console.log ('in ChatMessageCtrl, myChannelList=' + myChannelList);
+			  console.log ('in ChatMessageCtrl, channelChats=' + channelChats);
 		
 				channelChats.list($routeParams.channelName, function(channelChats) {
 					  $scope.channelChats = channelChats;
 					  $scope.channels = myChannelList;
-					  
+					  $scope.directChannels = myDirectList;
 					});
 
 				};
 				
       menuApp.controller('ChatMessageCtrl', getChannelChat );
+	  
+
+
 		  
     // menuApp.controller('AllCtrl', getMenu,getChannelChat );
 	 /*
