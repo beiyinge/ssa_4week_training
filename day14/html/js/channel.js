@@ -122,6 +122,7 @@ menuApp.factory('channels', function($http) {
 });
 
 menuApp.factory('dataService', function($http) {
+	//console.log("entering menuApp.factory.dataService");
     return {
         sendMessage: function(message, channel, user, success, failure) {
             $http({
@@ -136,6 +137,11 @@ menuApp.factory('dataService', function($http) {
         }
     };
 });
+
+
+
+
+
 
 
 
@@ -224,7 +230,8 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
         var msg = $scope.msg;
         dataService.sendMessage($scope.msg, $routeParams.channelName, user,
             (response) => {
-                var newMessage = {
+				console.log('  dataService call successful: ' + response);
+                var newMessage = {					
                     SENDER: user,
                     DATE: new Date().toString(),
                     MESSAGE: msg
@@ -235,7 +242,7 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
                 console.log("Error: server failed to add message.");
             }
         );
-        $scope.msg = '';
+		$scope.msg = '';
     };
 
 });
