@@ -143,6 +143,25 @@ exports.insertChannel = function  (db, ChannelName, teamName, publicFlag){
  
   
 }
+
+
+exports.insertChannelChat = function  (db, message, toChannel, fromUser, today) {
+	
+	 var insertChannelChatSql = "INSERT INTO CHANNEL_CHAT (CHANNELNAME, SENDER, MESSAGE, DATE) " +
+    "VALUES ('" + toChannel + "','" + fromUser +"', '"+ message + "','" + today + "');";
+	 
+	 return new Promise(function(resolve, reject) {
+			db.run(insertChannelChatSql, function(err){
+				if (err) {
+					reject(err);
+				}
+				resolve(); 
+			});
+ 
+	 });
+ 
+  
+}
 	
 var globleData=[];
 exports.getChannels = function (db, username) { 

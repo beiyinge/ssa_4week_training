@@ -50,12 +50,58 @@ app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
 
 
+//-- user id sending a message
 app.post('/message/', function(req, res) {
     var message = req.body.message;
     var channel = req.body.channel;
     var user = req.body.user;
+	
+	var today = new Date();
+	var dd = today.getDate();
+	var mm = today.getMonth()+1; //January is 0!
 
-    res.send('done');
+	var yyyy = today.getFullYear();
+
+	if(dd<10){			//-- ensure 2-digit day
+		dd='0'+dd
+	} 
+	if(mm<10){			//-- ensure 2-digit month
+		mm='0'+mm
+	} 
+	
+	var time = today.getTime();
+	var hour = today.getHours();
+	var minute = today.getMinutes();
+	var second = today.getSeconds();
+	if(hour<10){		//-- ensure 2-digit hour
+		hour='0'+hour
+	} 
+	if(minute<10){		//-- ensure 2-digit minute
+		minute='0'+minute
+	} 
+	if(second<10){		//-- ensure 2-digit second
+		second='0'+second
+	} 
+	
+	//-- string the timestamp together
+	var today = yyyy+'-'+mm+'-'+dd+' '+hour+':'+minute+':'+second;
+
+	
+	//console.log('in /message/, message=' + message);
+    slackdb.insertChannelChat(db, message, channel, user, today).then( //done);
+        function(val) {
+            console.log('****/message/, val ' + val + '*');
+            //json
+            res.send('inserted new message: ' + message);
+
+        },
+        function(err) {
+			res.status(500);
+            res.send('Could not insert message: ' + message);
+        }
+
+
+    )
 
 });
 //app.get('/tweet/:userid', followedTweet.tweet);
@@ -150,8 +196,8 @@ function getDefaultIndex(req, res) {
 
 
 
-function sendMessage(req, res) {
-    console.log('entering SlackCloneApp.js sendMessage(req, res)');
+//function sendMessage(req, res) {
+    //console.log('entering SlackCloneApp.js sendMessage(req, res)');
     //var _dirname = 'C:\\project\\ssa4_week_training\\day8\\slackclone\\html';
     //res.sendFile( _dirname+ '\\Welcome.html');
-}
+//}
