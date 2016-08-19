@@ -6,7 +6,7 @@
 exports.searchChannelMsgJSONPromisePublic = function (db, searchKeyword){
 		var query = "SELECT CHANNELNAME, SENDER , MESSAGE , DATE "+
 		//	var query = "SELECT CHANNEL.CHANNELNAME "+
-		" from CHANNEL_CHAT where MESSAGE like '%" + searchKeyword +"%'" ;
+		" from CHANNEL_CHAT where UPPER(MESSAGE) like UPPER('%" + searchKeyword +"%')" ;
 		
 		 console.log ('in searchChannelMsgJSONPromisePublic query=' +query);
 	    var channels = [];
