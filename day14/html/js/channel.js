@@ -9,16 +9,21 @@ function getCookie(cname) {
 	console.log("hi "+cname);
     var name = cname + "=";
     var ca = document.cookie.split(';');
-    for(var i = 0; i <ca.length; i++) {
+    for (var i = 0; i <ca.length; i++) {
         var c = ca[i];
         while (c.charAt(0)==' ') {
             c = c.substring(1);
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length,c.length);
+        if (c.indexOf(name) === 0) {
+            return c.substring(name.length);
         }
     }
     return "";
+}
+
+function deleteCookie(cname) {
+	document.cookie = cname + '=; expires=Monday, 19-Aug-1996 05:00:00 GMT";';
+	
 }
 
 
@@ -63,7 +68,7 @@ menuApp.factory('logon', function($http) {
 });
 
 var getUserID = function($scope, logon, $location) {
-	console.log("when refreshing the page " +getCookie("UserName"));
+	console.log("when refreshing the page " + getCookie("UserName"));
     $scope.loginUser = function() {
         logon.list($scope.username, function(logon) {
             var logonlist = [];
@@ -159,8 +164,11 @@ menuApp.controller('MenuCtrl', function($scope, channels, $routeParams) {
 				}					
 			}
 			$scope.directChannels = Array.from(directChannelSet);
+			console.log(getCookie("UserName") +" direct cookie");
 			$scope.userName= getCookie("UserName");
+			
 		    console.log($scope.userName +" direct messages");
+			
 			myDirectList= $scope.directChannels;
 			
 			console.log("sends from menu ctrl direct"+ getCookie("UserName"));

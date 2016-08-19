@@ -44,8 +44,8 @@ app.set('port', process.env.PORT || 8080);
 //app.get('/users', user.list);
 
 
-app.get('/', getDefaultIndex);
-app.get('/:UserName', getSlackUserID);
+//app.get('/', getDefaultIndex);
+app.get('/:userName', getSlackUserID);
 
 app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
@@ -75,7 +75,12 @@ http.createServer(app).listen(app.get('port'), function() {
 
 function getSlackUserID(req, res) {
     var str = '<B>***getSlackUserID**</B>';
-    var UserName = req.params.UserName;
+
+    console.log(req.params.userName);
+    if (req.params.userName === 'favicon.ico') {
+        res.send();
+    }
+    var UserName = req.params.userName;
     //		var tweets =  getFollowedTweets(req.params.userid );
     // res.send(str+ getFollowedTweets(req.params.userid ).toString());
     console.log('in getSlackUserID, username = ' + UserName);
@@ -105,7 +110,6 @@ function getChannelByUser(req, res) {
     console.log('in channelJSONPromisePublic, username=' + username);
 
 
-    res.cookie("userName", username);
     slackdb.channelJSONPromisePublic(db, username).then( //done);
         function(val) {
             console.log('****channelJSONPromisePublic, val=' + val + '*');

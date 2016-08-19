@@ -1,0 +1,34 @@
+<div class="container">
+	<form class="form-horizontal"> 
+	<h4> Welcome to Slack Clone</h4>
+
+	<div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+		<label for="usr" class="col-sm-2 control-label">Name:</label>
+		<div class="col-xs-3">
+			
+			<input type="text" class="form-control" id="usr" name="userid" ng-model="username" placeholder="Enter UserName">
+			<span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+        </div>
+
+	</div>
+
+	<div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+		<label for="pwd" class="col-sm-2 control-label">Password:</label>
+		<div class="col-xs-3">
+			
+			<input type="password" class="form-control" id="pwd"  name="password" ng-model="password" placeholder="Enter Password">
+			<span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+        </div>
+
+		</div>
+	</div>
+
+	<div class="form-actions">
+		<div class="col-sm-offset-2 col-sm-10">
+			<input type ="submit" class="btn btn-info"  id ="login" value ="Sign-in" ng-click="loginUser()"  />
+		</div >
+	</div>
+
+	</form>
+</div>
+
