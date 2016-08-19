@@ -112,7 +112,7 @@ app.post('/message/', function(req, res) {
 app.post('/saveDirectMessage/', function(req, res) {
     var message = req.body.message;
     var sender = req.body.sender;
-    var user = req.body.user;
+    var receiver = req.body.receiver;
 
     var today = new Date();
     var dd = today.getDate();
@@ -148,7 +148,7 @@ app.post('/saveDirectMessage/', function(req, res) {
     //console.log('in /message/, message=' + message);
     slackdb.insertDirectChat(db, message, sender, receiver, today).then( 
         function(val) {
-            console.log('****/message/, val ' + val + '*');
+            console.log('****/saveDirectMessage/, val ' + val + '*' + inserted new direct message: ' + message);
             //json
             res.send('inserted new direct message: ' + message);
 

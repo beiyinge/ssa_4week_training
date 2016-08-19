@@ -134,7 +134,20 @@ menuApp.factory('dataService', function($http) {
                     user: user
                 }
             }).then(success, failure);
-        }
+        },
+		sendDirectMessage : function(message, sender, receiver, success, failure) {
+			$http({
+                method: 'POST',
+                url: '/saveDirectMessage/',
+                data: {
+                    message: message,
+                    sender: sender,
+                    receiver: receiver
+                }
+            }).then(success, failure);
+			
+			
+		}
     };
 });
 
@@ -213,9 +226,10 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
         $scope.channelChats = channelChats;
         $scope.channels = myChannelList;
 		$scope.userName= getCookie("UserName");
-		$scope.directChannels = myDirectList;
-		
 		console.log($scope.userName +" chat  messages");
+		$scope.directChannels = myDirectList;
+		$scope.isDirectChat=false;
+		console.log('isDirectChat='+$scope.isDirectChat);
 
     });
 
@@ -262,7 +276,7 @@ menuApp.factory('messages', function($http){
 	  
 		
 		
-menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParams){
+menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParams, dataService){
 	console.log('getDirectChatsCtrl:channelName=' + $routeParams.channelName + ',userName=' + $routeParams.userName);
 	messages.list($routeParams.channelName, $routeParams.userName,function(messages) {
 		  console.log('messages.length=' + messages.length);
@@ -271,7 +285,38 @@ menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParam
 		  $scope.userName= getCookie("UserName");
 		  console.log($scope.userName +" direct chat messages");
 		  $scope.directChannels = myDirectList;
+		  $scope.isDirectChat=true;		  
+		  console.log('isDirectChat='+$scope.isDirectChat);		  
+
 	});
+	
+	$scope.sendDirectMessage = function() {
+        console.log('direct message to add', $scope.msg);
+		console.log('getcookie ', getCookie("UserName"));
+		
+        var user = getCookie("UserName"); //replaced the hardcoded username withe the getcookie method
+		
+		console.log(user + " cookie username for sendDirectMessage");
+		
+        var msg = $scope.msg;
+		
+        dataService.sendDirectMessage($scope.msg, user, $routeParams.channelName,
+            (response) => {
+				console.log('sendDirectMessage,  dataService call successful: ' + response);
+                var newMessage = {					
+                    SENDER: user,
+					RECEIVER: $routeParams.channelName,
+                    DATE: new Date().toString(),
+                    MESSAGE: msg
+                };
+                $scope.messages.push(newMessage);
+            },
+            (error) => {
+                console.log("Error: server failed to add message.");
+            }
+        );
+		$scope.msg = '';
+    };
 
 });
 
