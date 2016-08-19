@@ -10,7 +10,7 @@ var express = require('express'),
     slackdb = require('./SlackDB.js');
 
 
-
+var cookieParser = require('cookie-parser');
 var sqlite3 = require('sqlite3').verbose();
 
 var filename = 'slack_app.db';
@@ -76,11 +76,13 @@ function getSlackUserID(req, res) {
     var UserName = req.params.UserName;
     //		var tweets =  getFollowedTweets(req.params.userid );
     // res.send(str+ getFollowedTweets(req.params.userid ).toString());
-    console.log('in getSlackUserID, username=' + UserName);
+    console.log('in getSlackUserID, username = ' + UserName);
+	
     slackdb.getSlackUser(db, UserName).then( //done);
         function(val) {
             console.log('****getSlackUserID, val ' + val + '*');
             //json
+			res.cookie('UserName', UserName);
             res.send(val);
 
         },
