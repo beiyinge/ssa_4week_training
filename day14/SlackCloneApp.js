@@ -7,7 +7,8 @@ var express = require('express'),
     // , user = require('./routes/user')
     http = require('http'),
     path = require('path'),
-    slackdb = require('./SlackDB.js');
+    slackdb = require('./SlackDB.js')
+	, searchMsgUser = require('./searchMsgUser.js');
 
 
 var cookieParser = require('cookie-parser');
@@ -50,7 +51,8 @@ app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
 app.get('/direct/:userName', getPrivateChannelsByUserName);
 app.get('/message/:channelName/:userName', getDirectMessages);
-
+//search
+app.get('/searchMsg/:searchKeyword', getSearchMsgResults);
 
 app.post('/message/', function(req, res) {
     var message = req.body.message;
@@ -189,3 +191,21 @@ function sendMessage(req, res) {
     //var _dirname = 'C:\\project\\ssa4_week_training\\day8\\slackclone\\html';
     //res.sendFile( _dirname+ '\\Welcome.html');
 }
+
+		function getSearchMsgResults (req, res){
+			var str = '<B>***getSearchMsgResults**</B>';
+			var searchKeyword = req.params.searchKeyword;
+//			var tweets =  getFollowedTweets(req.params.userid );
+			// res.send(str+ getFollowedTweets(req.params.userid ).toString());
+			console.log ('in getSearchMsgResults, searchKeyword='+searchKeyword);
+			searchMsgUser.searchChannelMsgJSONPromisePublic(db, searchKeyword).then( //done);
+					function (val) {
+						console.log('**** in getSearchMsgResults, searchChannelMsgJSONPromisePublic, val '+val +'*');	
+						//json
+						res.send (val);
+										
+					},
+					function (err) {
+						done(err);
+					}		 
+			)};
