@@ -35,6 +35,13 @@
 			      <B>Direct Message List</B>
 			    <td>
 		   </tr>
+		   <tr>
+			    <td>
+					<div ng-repeat="item in directChannels">
+						<a href="#/directChats/{{item}}/{{userName}}">{{item}}</a>
+					</div>
+			    <td>
+		   </tr>		   
 		 </table>
 
 	
@@ -56,6 +63,12 @@
 			 <P> {{item.MESSAGE}}
 			 <hr>
 			 </div>
+			 
+			 <div ng-repeat="item in messages" >
+			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
+			 <P> {{item.MESSAGE}}
+			 <hr>
+			 </div>
          </td>
 		 </tr>
 		 <tr>
@@ -73,6 +86,21 @@
 		   </td>
 		 </tr>
        </table>
+	</td>
+		<td valign="top">
+	<div align="rigth" ng-controller="SearchCtrl">
+					Search: <input ng-model="enteredSearchKeyword" type="text"/> 
+					<button ng-click="searchPopup()">Search Popup</button>
+					
+				
+			<div ng-repeat="item in searchResults" >
+			 {{item.CHANNELNAME}}
+			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
+			 <P> {{item.MESSAGE}}
+			 <hr>
+			 </div>
+		  </div>
+	</div>
 	</td>
 </tr>
 
