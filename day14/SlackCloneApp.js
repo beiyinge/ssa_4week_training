@@ -148,7 +148,7 @@ app.post('/saveDirectMessage/', function(req, res) {
     //console.log('in /message/, message=' + message);
     slackdb.insertDirectChat(db, message, sender, receiver, today).then( 
         function(val) {
-            console.log('****/saveDirectMessage/, val ' + val + '*' + inserted new direct message: ' + message);
+            console.log('****/saveDirectMessage/, val ' + val + '*' + ' inserted new direct message: ' + message);
             //json
             res.send('inserted new direct message: ' + message);
 
