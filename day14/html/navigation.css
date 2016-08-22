@@ -6,7 +6,7 @@
     z-index: 1; /* Stay on top */
     top: 0;
     right: 0;
-    background-color: #eff2f5; /* Black*/
+    background-color: #eff2f5; /* light grey*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the rightSidenav */
@@ -37,9 +37,9 @@
     margin-left: 50px;
 }
 
-/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+/* Style page content - use this if you want to push the page content to the left when you open the side navigation */
 #main {
-    transition: margin-left .5s;
+    transition: margin-right .5s;
     padding: 20px;
 }
 
@@ -47,4 +47,45 @@
 @media screen and (max-height: 450px) {
     .rightSidenav {padding-top: 15px;}
     .rightSidenav a {font-size: 18px;}
+}
+
+
+.searchSidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 40px;
+    right: 0;
+    background-color: #eff2f5;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+}
+
+.searchSidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s
+}
+
+.searchSidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+.searchSidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+}
+
+
+@media screen and (max-height: 450px) {
+  .searchSidenav {padding-top: 15px;}
+  .searchSidenav a {font-size: 18px;}
 }
