@@ -35,6 +35,10 @@ menuApp.config(function($routeProvider) {
         templateUrl: "logon.html",
         controller: 'loginCtrl'
     }).
+	when('/logout/', {
+        templateUrl: "logon.html",
+        controller: 'logoutCtrl'
+    }).
     when('/:userName', {
         templateUrl: "all.html",
         controller: 'MenuCtrl'
@@ -54,10 +58,11 @@ menuApp.config(function($routeProvider) {
     $locationProvider.html5Mode = true;
 }]);
 
-menuApp.factory('logon', function($http) {
+
+menuApp.factory('logout', function($http) {
     return {
         list: function(userName, callback) {
-            console.log(userName);
+            console.log(userName +" loggingout");
             $http({
                 method: 'GET',
                 url: 'http://localhost:8080/' + userName,
@@ -67,14 +72,44 @@ menuApp.factory('logon', function($http) {
     };
 });
 
+var setUserID = function($scope, logout, $location) {
+	console.log("when logging out the page " + getCookie("UserName"));
+      
+    deleteCookie("UserName");
+	myChannelList = [];
+	myDirectList=[];
+    $location.path("/");
+};
+
+
+menuApp.controller('logoutCtrl', setUserID);
+
+menuApp.factory('logon', function($http) {
+    return {
+        list: function(userName, callback) {
+            console.log(userName +" logging in");
+            $http({
+                method: 'GET',
+                url: 'http://localhost:8080/' + userName,
+                cache: false
+            }).success(callback);
+        }
+    };
+});
+
 var getUserID = function($scope, logon, $location) {
 	console.log("when refreshing the page " + getCookie("UserName"));
+	
+		
     $scope.loginUser = function() {
         logon.list($scope.username, function(logon) {
+			console.log("login data" + $scope.username);
+			
             var logonlist = [];
             $scope.users = logon;
             logonlist = logon;
             var loggedin = false;
+			console.log("totalUsers" + $scope.users.length);
             var totalUsers = $scope.users.length;
             var usernameTyped = $scope.username;
             var passwordTyped = $scope.password;
@@ -107,7 +142,7 @@ menuApp.factory('channels', function($http) {
             $http({
                 method: 'GET',
                 url: '/channel/' + userName,
-                cache: true
+                cache: false
             }).success(callback);
 
         },
@@ -115,7 +150,7 @@ menuApp.factory('channels', function($http) {
 			$http({
 			  method: 'GET',
 			  url:    'http://localhost:8080/direct/'+ userName,
-			  cache: true
+			  cache: false
 			}).success(callback);
 		}
     };
@@ -142,14 +177,12 @@ menuApp.factory('dataService', function($http) {
 
 
 
-
-
-
-menuApp.controller('MenuCtrl', function($scope, channels, $routeParams) {
+var getMenuCtrl = function($scope, channels, $routeParams) {
     count = count + 1;
-    console.log(count + ', in getMenu function, userName=' + $routeParams.userName);
+    console.log(count + ', in getMenu function, userName=' + getCookie("UserName"));
+	console.log(myChannelList.length);
     if (myChannelList.length === 0) {
-        channels.list($routeParams.userName, function(channels) {
+        channels.list(getCookie("UserName"), function(channels) {
             $scope.channels = channels;
             console.log("***$scope.channels, " + $scope.channels);
             myChannelList = $scope.channels;
@@ -158,12 +191,12 @@ menuApp.controller('MenuCtrl', function($scope, channels, $routeParams) {
     }
 	
 	if (myDirectList.length===0) {
-		channels.directList($routeParams.userName, function(channels){
+		channels.directList(getCookie("UserName"), function(channels){
 			var directChannelSet = new Set();
 
 			for(var i = 0; i < channels.length; i++) {
 				console.log("SENDER="+channels[i].SENDER + ",RECEIVER="+channels[i].RECIEVER);
-				if (channels[i].SENDER===$routeParams.userName) {
+				if (channels[i].SENDER===getCookie("UserName")) {
 					directChannelSet.add(channels[i].RECIEVER);
 				} else {
 					directChannelSet.add(channels[i].SENDER);
@@ -181,7 +214,9 @@ menuApp.controller('MenuCtrl', function($scope, channels, $routeParams) {
 		});
 	}
 
-});
+}
+
+menuApp.controller('MenuCtrl', getMenuCtrl);
 
 
 menuApp.factory('channelChats', function($http) {
@@ -195,20 +230,27 @@ menuApp.factory('channelChats', function($http) {
             $http({
                 method: 'GET',
                 url: '/channelChats/' + channelName,
-                cache: true
+                cache: false
             }).success(callback);
         }
     };
 });
 
 
-menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParams, $rootScope, dataService) {
+menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParams, $rootScope, dataService,channels) {
     count = count + 1;
     console.log(count + ', in ChatMessageCtrl, ' + $routeParams.channelName);
     $scope.displayName = $routeParams.channelName;
 
     console.log('in ChatMessageCtrl, myChannelList=' + myChannelList);
-
+     console.log(myChannelList.length + " chatmessage");
+	 if (myChannelList.length === 0)
+	 {
+		 console.log("inside");
+		 console.log("sends from chat controller  "+ getCookie("UserName"));
+              getMenuCtrl($scope,channels,$routeParams);
+		 console.log("outside");
+	 }
     channelChats.list($routeParams.channelName, function(channelChats) {
         $scope.channelChats = channelChats;
         $scope.channels = myChannelList;
@@ -254,7 +296,7 @@ menuApp.factory('messages', function($http){
 		$http({
 		  method: 'GET',
 		  url:    'http://localhost:8080/message/' + channelName + '/' + userName,
-		  cache: true
+		  cache: false
 		}).success(callback);
 	  }
 	};
@@ -263,8 +305,8 @@ menuApp.factory('messages', function($http){
 		
 		
 menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParams){
-	console.log('getDirectChatsCtrl:channelName=' + $routeParams.channelName + ',userName=' + $routeParams.userName);
-	messages.list($routeParams.channelName, $routeParams.userName,function(messages) {
+	console.log('getDirectChatsCtrl:channelName=' + $routeParams.channelName + ',userName=' + getCookie("UserName"));
+	messages.list($routeParams.channelName, getCookie("UserName"),function(messages) {
 		  console.log('messages.length=' + messages.length);
 		  $scope.messages = messages;
 		  $scope.channels = myChannelList;
