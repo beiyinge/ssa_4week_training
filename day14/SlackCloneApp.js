@@ -109,6 +109,60 @@ app.post('/message/', function(req, res) {
 
 });
 
+app.post('/saveDirectMessage/', function(req, res) {
+    var message = req.body.message;
+    var sender = req.body.sender;
+    var receiver = req.body.receiver;
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) { //-- ensure 2-digit day
+        dd = '0' + dd
+    }
+    if (mm < 10) { //-- ensure 2-digit month
+        mm = '0' + mm
+    }
+
+    var time = today.getTime();
+    var hour = today.getHours();
+    var minute = today.getMinutes();
+    var second = today.getSeconds();
+    if (hour < 10) { //-- ensure 2-digit hour
+        hour = '0' + hour
+    }
+    if (minute < 10) { //-- ensure 2-digit minute
+        minute = '0' + minute
+    }
+    if (second < 10) { //-- ensure 2-digit second
+        second = '0' + second
+    }
+
+    //-- string the timestamp together
+    var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
+
+
+    //console.log('in /message/, message=' + message);
+    slackdb.insertDirectChat(db, message, sender, receiver, today).then( 
+        function(val) {
+            console.log('****/saveDirectMessage/, val ' + val + '*' + ' inserted new direct message: ' + message);
+            //json
+            res.send('inserted new direct message: ' + message);
+
+        },
+        function(err) {
+            res.status(500);
+            res.send('Could not insert direct message: ' + message);
+        }
+
+
+    )
+
+});
+
 //app.get('/tweet/:userid', followedTweet.tweet);
 
 //app.get('/followedtweet', getFollowedTweets('abu'));

@@ -162,6 +162,24 @@ exports.insertChannelChat = function  (db, message, toChannel, fromUser, today) 
  
   
 }
+
+exports.insertDirectChat = function  (db, message, sender, receiver, today) {
+	
+	 var insertDirectChatSql = "INSERT INTO DIRECT_CHAT (SENDER, RECIEVER, MESSAGE, DATE) " +
+    "VALUES ('" + sender + "','" + receiver +"', '"+ message + "','" + today + "');";
+	 
+	 return new Promise(function(resolve, reject) {
+			db.run(insertDirectChatSql, function(err){
+				if (err) {
+					reject(err);
+				}
+				resolve(); 
+			});
+ 
+	 });
+ 
+  
+}
 	
 var globleData=[];
 exports.getChannels = function (db, username) { 

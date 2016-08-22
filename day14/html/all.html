@@ -82,10 +82,19 @@
 		   <hr>
 		   <br>
 		   <div>
-				<form ng-submit="sendMessage()">
+			  
+				<div ng-hide="isDirectChat">
+					<form ng-submit="sendMessage()">				
 					Message: <input type="text" ng-model="msg">
-							 <input type="submit" value="send">
-				</form>
+							 <input type="submit" value="send Channel">
+					</form>
+				</div> 
+				<div ng-show="isDirectChat">					
+					<form ng-submit="sendDirectMessage()">
+					Message: <input type="text" ng-model="msg">
+							 <input type="submit" value="send Direct">
+					</form>
+				<div>	
 				<br>	
 		   </div>
 		   </td>
