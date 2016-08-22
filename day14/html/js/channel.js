@@ -1,5 +1,6 @@
 var menuApp = angular.module('menuApp', ['ngRoute']);
 var count = 1;
+var teamList =[];
 var myChannelList = [];
 var myDirectList=[];
 
@@ -194,14 +195,25 @@ var getMenuCtrl = function($scope, channels, $routeParams) {
     count = count + 1;
     console.log(count + ', in getMenu function, userName=' + getCookie("UserName"));
 	console.log(myChannelList.length);
+	
     if (myChannelList.length === 0) {
         channels.list(getCookie("UserName"), function(channels) {
             $scope.channels = channels;
             console.log("***$scope.channels, " + $scope.channels);
             myChannelList = $scope.channels;
             //  $scope.subviewChannelChats= "channelChats.html";
+			
+			var teamSet = new Set();
+			for(var i = 0; i < channels.length; i++) {				
+				teamSet.add(channels[i].TEAMNAME);
+			}
+			$scope.teams = Array.from(teamSet);
+			teamList = $scope.teams;
         });
+		
+		
     }
+	
 	
 	if (myDirectList.length===0) {
 		channels.directList(getCookie("UserName"), function(channels){
@@ -266,6 +278,7 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
 	 }
     channelChats.list($routeParams.channelName, function(channelChats) {
         $scope.channelChats = channelChats;
+		$scope.teams = teamList;
         $scope.channels = myChannelList;
 		$scope.userName= getCookie("UserName");
 		console.log($scope.userName +" chat  messages");
@@ -325,6 +338,7 @@ menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParam
 
 		  console.log('messages.length=' + messages.length);
 		  $scope.messages = messages;
+		  $scope.teams = teamList;
 		  $scope.channels = myChannelList;
 		  $scope.userName= getCookie("UserName");
 		  console.log($scope.userName +" direct chat messages");

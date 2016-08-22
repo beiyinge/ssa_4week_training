@@ -48,14 +48,15 @@
 		 <table border=0 width="100%" >
 		   <tr>
 			    <td>
+				
 			      <B>Team name</B>
 			    
 			    </td>
 		   </tr>
 		   <tr >
 		    <td>
-				<div ng-repeat="item in channels">
-				  <a href="#/team/{{item.TEAMNAME}}">{{item.TEAMNAME}}</a>
+				<div ng-repeat="team in teams">
+					{{team}}
 				</div>
 			</td>
 		   </tr>
@@ -67,7 +68,7 @@
 		   <tr>
         	<td>
 				<div ng-repeat="item in channels">
-				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
+					<a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
 				</div>
 			</td>
 		   </tr>
@@ -125,13 +126,13 @@
 				<div ng-hide="isDirectChat">
 					<form ng-submit="sendMessage()">				
 					Message: <input type="text" ng-model="msg">
-							 <input type="submit" value="send Channel">
+							 <input type="submit" value="send">
 					</form>
 				</div> 
 				<div ng-show="isDirectChat">					
 					<form ng-submit="sendDirectMessage()">
 					Message: <input type="text" ng-model="msg">
-							 <input type="submit" value="send Direct">
+							 <input type="submit" value="send">
 					</form>
 				</div>	
 				</br>	
