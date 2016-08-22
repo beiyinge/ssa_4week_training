@@ -1,12 +1,26 @@
 
- <div id="divSignOutID" >
- <h5>
- <label id="lblUsername"><i>{{userName}}</i></label>
- <a href="#/logout/">SignOut</a></h5>
- </div>
+ <table align="right">
+   <tr>
+   <td>
+   <b>Hello</b>: <label id="lblUsername"><i>{{userName}}</i></label>
+	 </td>
+
+   	<td align=right> 	 
+	<span class="glyphicon glyphicon-menu-hamburger" onclick="openRightNav()"></span>
+	 
+	   <div id="myRightSidenav" class="rightSidenav" align="left">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>
+  
+  <a href="#">Create Team</a>
+  <a href="#/logout/">SignOut</a>
+	</div>
+	 </td>
+	 
+ </tr>
+ </table>
 	<table border=1 width="100%" >
 		<tr>
-	<td width="30%" valign="top">
+	<td width="30%" valign="top" class="leftMenuBKGrnd">
         
 		
 		 <table border=0 width="100%" >
@@ -14,7 +28,7 @@
 			    <td>
 			      <B>Team name</B>
 			    
-			    <td>
+			    </td>
 		   </tr>
 		   <tr >
 		    <td>
@@ -26,7 +40,7 @@
 		    <tr>
 			    <td>
 			    <B>Channel Names</B>
-			    <td>
+			    </td>
 		   </tr>
 		   <tr>
         	<td>
@@ -38,14 +52,14 @@
 		  <tr>
 			    <td>
 			      <B>Direct Message List</B>
-			    <td>
+			    </td>
 		   </tr>
 		   <tr>
 			    <td>
 					<div ng-repeat="item in directChannels">
 						<a href="#/directChats/{{item}}/{{userName}}">{{item}}</a>
 					</div>
-			    <td>
+			    </td>
 		   </tr>		   
 		 </table>
 		
@@ -61,18 +75,21 @@
 		    </td>
 		 </tr>
 		 <tr>
-		 <td>
+		 <td class="centerMessage">
 		 
 			<div ng-repeat="item in channelChats" >
-			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
-			 <P> {{item.MESSAGE}}
-			 <hr>
+			  <blockquote>
+			    <B>*{{item.SENDER}}</B> | {{item.DATE}}
+			    <footer> {{item.MESSAGE}} </footer>
+			  </blockquote>
 			 </div>
 			 
 			 <div ng-repeat="item in messages" >
-			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
-			 <P> {{item.MESSAGE}}
-			 <hr>
+			  <blockquote>
+			 <B>*{{item.SENDER}}</B> | {{item.DATE}}
+			 
+			 <footer>  {{item.MESSAGE}} </footer>
+			 </blockquote>
 			 </div>
          </td>
 		 </tr>
@@ -94,27 +111,28 @@
 					Message: <input type="text" ng-model="msg">
 							 <input type="submit" value="send Direct">
 					</form>
-				<div>	
-				<br>	
+				</div>	
+				</br>	
 		   </div>
 		   </td>
 		 </tr>
        </table>
 	</td>
-		<td valign="top">
-	<div align="rigth" ng-controller="SearchCtrl">
+	<td valign="top" class="rightMenuBKGrnd">
+	   <div align="rigth" ng-controller="SearchCtrl">
 					Search: <input ng-model="enteredSearchKeyword" type="text"/> 
-					<button ng-click="searchPopup()">Search Popup</button>
-					
-				
-			<div ng-repeat="item in searchResults" >
-			 {{item.CHANNELNAME}}
-			 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
-			 <P> {{item.MESSAGE}}
-			 <hr>
-			 </div>
-		  </div>
+					<button ng-click="searchPopup()">Search</button>
+				<div ng-repeat="item in searchResults" >
+				 <blockquote>{{item.CHANNELNAME}}
+				 <br><B>*{{item.SENDER}}</B> | {{item.DATE}}
+				 <footer> {{item.MESSAGE}} </footer>
+				 </blockquote>
 	</div>
+		  </div>
+	
+
+	 </td>
+	 
 	</td>
 </tr>
 
