@@ -49,8 +49,8 @@ menuApp.config(function($routeProvider) {
         controller: 'ChatMessageCtrl'
     }).
 	when('/directChats/:channelName/:userName', {
-				templateUrl: "all.html",
-				controller: 'getDirectChatsCtrl'
+		templateUrl: "all.html",
+		controller: 'getDirectChatsCtrl'
 	}).
     otherwise({
         redirectTo: '/'

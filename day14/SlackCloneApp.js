@@ -163,6 +163,60 @@ app.post('/saveDirectMessage/', function(req, res) {
 
 });
 
+app.post('/createTeam/', function(req, res) {
+    var name = req.body.name;
+    var desc = req.body.desc;
+    var user = req.body.user;
+	console.log('****/createTeam/, name=' + name + '*' + ', desc=' + desc);
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) { //-- ensure 2-digit day
+        dd = '0' + dd
+    }
+    if (mm < 10) { //-- ensure 2-digit month
+        mm = '0' + mm
+    }
+
+    var time = today.getTime();
+    var hour = today.getHours();
+    var minute = today.getMinutes();
+    var second = today.getSeconds();
+    if (hour < 10) { //-- ensure 2-digit hour
+        hour = '0' + hour
+    }
+    if (minute < 10) { //-- ensure 2-digit minute
+        minute = '0' + minute
+    }
+    if (second < 10) { //-- ensure 2-digit second
+        second = '0' + second
+    }
+
+    //-- string the timestamp together
+    var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
+
+
+    slackdb.createTeam(db, name, desc, user, today).then( 
+        function(val) {
+            console.log('****/createTeam/, val ' + val + '*' + ' inserted new team: ' + name);
+            //json
+            res.send('Successfully created a team: ' + name);
+
+        },
+        function(err) {
+            res.status(500);
+            res.send('Could not create a team: ' + name);
+        }
+
+
+    )
+
+});
+
 //app.get('/tweet/:userid', followedTweet.tweet);
 
 //app.get('/followedtweet', getFollowedTweets('abu'));

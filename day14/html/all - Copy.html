@@ -27,45 +27,12 @@
     </td>	
 	 <td valign="top" align="rigth">
 	&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-hamburger" onclick="openRightNav()"></span>
-	
-	<div ng-controller="teamCtrl">	
-		<div id="myRightSidenav" class="rightSidenav" align="left">
-			<a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>		  
-			<a href="" data-toggle="modal" data-target="#myModal" ng-click="success=false;name='';desc='';isDisabled=false;form.$submitted=false;form.uName.$touched=false;">Create Team</a> 
-			<a href="#/logout/">SignOut</a>
+	 
+	   <div id="myRightSidenav" class="rightSidenav" align="left">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>
   
-		</div> 
-	
-		<!-- Modal -->
-		<div class="modal fade" id="myModal" role="dialog">
-			<div class="modal-dialog">
-
-			  <!-- Modal content-->
-			  <div class="modal-content" >
-				<div class="modal-header">
-				  <button type="button" class="close" data-dismiss="modal">&times;</button>
-				  <h4 class="modal-title">Create a Team</h4>
-				</div>
-				<div ng-show="success">Team {{name}} is created successfully.</div>
-				<div class="modal-body">				
-					<form name="form" novalidate class="simple-form" ng-submit="form.$valid && update()" >
-						Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	
-						<div ng-show="form.$submitted || form.uName.$touched">
-							<div ng-show="form.uName.$error.required">Team name cannot be empty.</div>
-						</div>
-						Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />			
-						
-						<input type="submit" value="Save" ng-disabled="isDisabled" />
-					</form>			
-				</div>
-				<div class="modal-footer">
-				  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			  </div>
-			  
-			</div>
-		</div>
-
+  <a href="#">Create Team</a>
+  <a href="#/logout/">SignOut</a>
 	</div>
 	 </td>
  </tr>
@@ -88,8 +55,8 @@
 		   </tr>
 		   <tr >
 		    <td>
-				<div ng-repeat="team in teams">
-					{{team}}
+				<div ng-repeat="item in channels" ng-if="$index === channels.indexOf(item)">
+				  	<a href="#/team/{{item.TEAMNAME}}">{{item.TEAMNAME}}</a>
 				</div>
 			</td>
 		   </tr>
@@ -101,7 +68,7 @@
 		   <tr>
         	<td>
 				<div ng-repeat="item in channels">
-				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
+					<a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
 				</div>
 			</td>
 		   </tr>

@@ -163,13 +163,13 @@ exports.insertChannelChat = function  (db, message, toChannel, fromUser, today) 
   
 }
 
-exports.insertDirectChat = function  (db, message, sender, receiver, today) {
+exports.createTeam = function  (db, name, desc, user, today) {
 	
-	 var insertDirectChatSql = "INSERT INTO DIRECT_CHAT (SENDER, RECIEVER, MESSAGE, DATE) " +
-    "VALUES ('" + sender + "','" + receiver +"', '"+ message + "','" + today + "');";
-	 
+	 var insertTeamSql = "INSERT INTO TEAM (TEAMNAME, DESCR, CREATED_USER, DATE) " +
+    "VALUES ('" + name + "','" + desc +"', '" + user + "','" + today +  "');";
+	 console.log("insertTeamSql="+insertTeamSql);
 	 return new Promise(function(resolve, reject) {
-			db.run(insertDirectChatSql, function(err){
+			db.run(insertTeamSql, function(err){
 				if (err) {
 					reject(err);
 				}
