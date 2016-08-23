@@ -1,9 +1,4 @@
-/**
- * http://usejsdoc.org/
- */
-
-	//function channelChatJSONPromise(db, channelName) {
-exports.searchChannelMsgJSONPromisePublic = function (db, searchKeyword, userName){
+exports.createTeamMsgJSONPromisePublic = function (db, name, desc, user){
 		var query = "SELECT CHANNELNAME, SENDER , MESSAGE , DATE "+
 		//	var query = "SELECT CHANNEL.CHANNELNAME "+
 		" from CHANNEL_CHAT where (UPPER(MESSAGE) like UPPER('%" + searchKeyword +"%')" +

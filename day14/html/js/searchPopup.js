@@ -18,25 +18,7 @@
 					  console.log ("searchResults=" + searchResults);
 					});
 					
-		/*
-		var modalSearchInstance = $modal.open({
-			templateUrl: 'searchResults.html'
-			,controller: 'ModalSearchInstanceCtl'
-			,windowClass: 'large-Modal'
-			,resolve: {
-				items: function () {
-					return $scope.items;
-				}
-			}
-			
-		});
-		
-		 modalSearchInstance.result.then(function (selectedItem) {
-		  $scope.selected = selectedItem;
-		}, function () {
-		  $log.info('Modal dismissed at: ' + new Date());
-		});
-		*/
+	
 	
 	};
 }
@@ -54,10 +36,12 @@
   //these functions, are defined inside one function, cacheData retains
 		 return {
           getSearchResultList: function (searchKeyword, callback){
-		  console.log ('searchKeyword=' + searchKeyword);
+		  console.log ('********searchKeyword=' + searchKeyword);
+		  console.log ('*******getCookie=' + getCookie("UserName"));
+		  
             $http({
               method: 'GET',
-              url:    'http://localhost:8080/searchMsg/'+searchKeyword,
+              url:    'http://localhost:8080/searchMsg/'+searchKeyword+'/userName/'+getCookie("UserName"),
               cache: false
             }).success(callback);
           }
@@ -65,11 +49,12 @@
       });
 
 		getSearchResults = function ($scope, searchResults, $routeParams){
-		count = count+1;
+		      count = count+1;
+			  console.log ( count + ', in getSearchResults, $routeParams.channelName ');
 			  console.log ( count + ', in getSearchResults, ' + $routeParams.channelName);
 			  $scope.displayName = $routeParams.channelName;
 					
-				searchResults.getSearchResultList($scope.searchKeyword, function(searchResults) {
+			  searchResults.getSearchResultList($scope.searchKeyword, function(searchResults) {
 					  $scope.searchResults = searchResults;
 					 // $scope.channels = myChannelList;
 					  
@@ -77,25 +62,7 @@
 
 				};
 				
-    //  menuApp.controller('ModalSearchInstanceCtl', getSearchResults );
-	  
-	  
-	  menuApp.service('searchResultsServiceNew', function() {
-		  var productList = [];
+      
 
-		  var addProduct = function(newObj) {
-			  productList.push(newObj);
-		  };
-
-		  var getProducts = function(){
-			  return productList;
-		  };
-
-		  return {
-			addProduct: addProduct,
-			getProducts: getProducts
-		  };
-
-		});
 
 
