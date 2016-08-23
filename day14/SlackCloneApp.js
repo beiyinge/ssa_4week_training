@@ -52,7 +52,8 @@ app.get('/channelChats/:channelName', getChannelChatByChannelName);
 app.get('/direct/:userName', getPrivateChannelsByUserName);
 app.get('/message/:channelName/:userName', getDirectMessages);
 //search
-app.get('/searchMsg/:searchKeyword', getSearchMsgResults);
+//app.get('/searchMsg/:searchKeyword', getSearchMsgResults);
+app.get('/searchMsg/:searchKeyword/userName/:userName', getSearchMsgResults);
 
 //-- user id sending a message
 app.post('/message/', function(req, res) {
@@ -347,6 +348,7 @@ function getDefaultIndex(req, res) {
 function getSearchMsgResults(req, res) {
     var str = '<B>***getSearchMsgResults**</B>';
     var searchKeyword = req.params.searchKeyword;
+	var userName = req.params.userName;
     //			var tweets =  getFollowedTweets(req.params.userid );
     // res.send(str+ getFollowedTweets(req.params.userid ).toString());
     console.log('in getSearchMsgResults, searchKeyword=' + searchKeyword);
