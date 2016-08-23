@@ -27,7 +27,7 @@
 	</div>
     </td>	
 	 <td valign="top" align="rigth">
-	&nbsp;&nbsp;<span class="glyphicon glyphicon-menu-hamburger" onclick="openRightNav()"></span>
+	&nbsp;&nbsp;<span class="glyphicon glyphicon-option-vertical" onclick="openRightNav()"></span>
 	
 	<div ng-controller="teamCtrl">	
 		<div id="myRightSidenav" class="rightSidenav" align="left">
@@ -159,13 +159,20 @@
 			  
 				<div ng-hide="isDirectChat">
 					<form ng-submit="sendMessage()">				
-					Message: <input type="text" ng-model="msg">
+					Message: <a href="#">
+				  <span class="glyphicon glyphicon-plus"></span>
+				</a>
+		          <input type="text" ng-model="msg">
 							 <input type="submit" value="send">
 					</form>
 				</div> 
 				<div ng-show="isDirectChat">					
 					<form ng-submit="sendDirectMessage()">
-					Message: <input type="text" ng-model="msg">
+					Message: 
+					<a href="#">
+          <span class="glyphicon glyphicon-plus"></span>
+        </a>
+					<input type="text" ng-model="msg">
 							 <input type="submit" value="send">
 					</form>
 				</div>	
