@@ -14,7 +14,7 @@
 					 <button onclick="openSearchNav()" ng-click="searchPopup()">Search
 					 </button>
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
-		  <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
+		  &nbsp; &nbsp; <span align="center"><B>Search Results</B></span>&nbsp; <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
 		  
 			 <div ng-repeat="item in searchResults | filter:enteredSearchKeyword"
 					ng-bind-html="item | highlight:enteredSearchKeyword">
