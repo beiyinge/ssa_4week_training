@@ -4,35 +4,42 @@
 	menuApp.controller('SearchCtrl',function ($scope, searchResultsService)  {
 	console.log( count +', in SearchCtrl '+  $scope.enteredSearchKeyword);
 	
-	$scope.searchPopup = function () {
+	$scope.searchPopup = function (event) {
 		console.log( count +', opening pop up');
 		$scope.searchKeyword = $scope.enteredSearchKeyword;
 		
 		count = count+1;
 			  console.log ( count + ', in getSearchResults, ');
-			//  $scope.displayName = $routeParams.channelName;
-					
+			//  enter key
+				if (event.keyCode === 13) {	
 				searchResultsService.getSearchResultList($scope.searchKeyword, function(searchResults) {
 					  $scope.searchResults = searchResults;
 					 // $scope.channels = myChannelList;
 					  console.log ("searchResults=" + searchResults);
+					  document.getElementById("searchBtn").click();
 					});
-					
+				}
 	
 	
 	};
+	
+
 }
 //]
 )
   .filter('highlight', function($sce) {
     return function(item, phrase) {
 	  var messageTemp = item.MESSAGE;
+	  var userNameTemp = item.SENDER;
       if (phrase) messageTemp = messageTemp.replace(new RegExp('('+phrase+')', 'gi'),
+        '<span class="highlighted">$1</span>')
+		
+	  if (phrase) userNameTemp = userNameTemp.replace(new RegExp('('+phrase+')', 'gi'),
         '<span class="highlighted">$1</span>')
 
 		var formatedSearchResults =
 		 "<blockquote>" + item.CHANNELNAME +
-						" <br><span class='glyphicon glyphicon-user'></span><B>"+ item.SENDER + "</B> | " + item.DATE +
+						" <br><span class='glyphicon glyphicon-user'></span><B>"+ userNameTemp + "</B> | <span class='smallDate'>" + item.DATE +"</span>" +
 						" <footer> "+ messageTemp + "</footer>" +
 						 "</blockquote>";
 						 

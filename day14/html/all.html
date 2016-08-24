@@ -9,12 +9,13 @@
 	 <td width="40%" align="rigth">
 	 <div align="rigth" ng-controller="SearchCtrl">
 					 &nbsp; &nbsp; <span class="glyphicon glyphicon-search"></span>
-					 <input ng-model="enteredSearchKeyword" type="text" size=10/> 
+					 <input ng-model="enteredSearchKeyword" type="text" size=10 ng-keypress="searchPopup($event);openSearchNav()" /> 
 			
-					 <button onclick="openSearchNav()" ng-click="searchPopup()">Search
+					 <button id="searchBtn" onclick="openSearchNav()" ng-click="searchPopup($event)">Search
 					 </button>
+					 
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
-		  <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
+		  &nbsp; &nbsp; <span align="center"><B>Search Results</B></span>&nbsp; <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
 		  
 			 <div ng-repeat="item in searchResults | filter:enteredSearchKeyword"
 					ng-bind-html="item | highlight:enteredSearchKeyword">

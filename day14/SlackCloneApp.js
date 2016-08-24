@@ -352,7 +352,7 @@ function getSearchMsgResults(req, res) {
     //			var tweets =  getFollowedTweets(req.params.userid );
     // res.send(str+ getFollowedTweets(req.params.userid ).toString());
     console.log('in getSearchMsgResults, searchKeyword=' + searchKeyword);
-    searchMsgUser.searchChannelMsgJSONPromisePublic(db, searchKeyword).then( //done);
+    searchMsgUser.searchChannelMsgJSONPromisePublic(db, searchKeyword, userName).then( //done);
         function(val) {
             console.log('**** in getSearchMsgResults, searchChannelMsgJSONPromisePublic, val ' + val + '*');
             //json
