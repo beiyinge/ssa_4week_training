@@ -32,6 +32,7 @@ function createSlackTables(db){
 	        var createTeamTableSql = "CREATE TABLE IF NOT EXISTS TEAM " +
 	                    "(TEAMNAME        CHAR(25)    NOT NULL," +
 	                    " DESCR         CHAR(140)  , " + 
+						" CREATED_USER  CHAR(25)  , " + 
 	                    " DATE          TEXT        NOT NULL)"; 
 	        
 	        var createTeamUserTableSql = "CREATE TABLE IF NOT EXISTS TEAMUSER " +

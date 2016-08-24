@@ -159,7 +159,8 @@
 			  
 				<div ng-hide="isDirectChat">
 					<form ng-submit="sendMessage()">				
-					Message: <a href="#">
+					Message: 
+				<a href="" data-toggle="modal" data-target="#uploadModal">
 				  <span class="glyphicon glyphicon-plus"></span>
 				</a>
 		          <input type="text" ng-model="msg">
@@ -169,13 +170,46 @@
 				<div ng-show="isDirectChat">					
 					<form ng-submit="sendDirectMessage()">
 					Message: 
-					<a href="#">
-          <span class="glyphicon glyphicon-plus"></span>
-        </a>
+					<a href="" data-toggle="modal" data-target="#uploadModal">
+					  <span class="glyphicon glyphicon-plus"></span>
+					</a>
 					<input type="text" ng-model="msg">
 							 <input type="submit" value="send">
 					</form>
 				</div>	
+				<!-- Upload Modal -->
+				<div ng-controller="uploadfilectrl">
+					<div class="modal fade" id="uploadModal" role="dialog">
+						<div class="modal-dialog">
+
+						  <!-- Modal content-->
+						  <div class="modal-content" >
+							<div class="modal-header">
+							  <button type="button" class="close" data-dismiss="uploadModal">&times;</button>
+							  <h4 class="modal-title">Upload File</h4>
+							</div>
+							<div class="modal-body">				
+								<form name="formupload"  class="simple-form" ng-submit="uploadfile()" >
+									Select the file: <input 
+													type="file" 
+													ngf-select 
+													ng-model="filename" 
+													name="file" 
+													ngf-pattern="'image/*'"
+													accept="image/*" 
+													ngf-max-size="20MB" 
+													/><br /><br />	
+									<input type="submit" value="Upload File"  />
+								</form>			
+							</div>
+							<div class="modal-footer">
+							  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						  </div>
+						  
+						</div>
+					</div>
+				</div>
 				</br>	
 		   </div>
 		   </td>

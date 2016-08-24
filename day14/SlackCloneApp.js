@@ -16,7 +16,7 @@ var sqlite3 = require('sqlite3').verbose();
 
 var filename = 'slack_app.db';
 var db = new sqlite3.Database(filename);
-
+var multer = require('multer');
 
 var app = express();
 app.use(express.static('html'));
