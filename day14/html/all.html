@@ -26,8 +26,9 @@
 		   
 		</div>
 				
-	</div>
+		</div>
     </td>	
+		
 	 <td valign="top" align="rigth">
 	&nbsp;&nbsp;<span class="glyphicon glyphicon-option-vertical" onclick="openRightNav()"></span>
 	
@@ -78,7 +79,7 @@
  
 	<table border=1 width="100%" >
 		<tr>
-	<td width="30%" valign="top" class="leftMenuBKGrnd">
+	<td width="15%" valign="top" class="leftMenuBKGrnd">
         
 		
 		 <table border=0 width="100%" >
@@ -92,6 +93,7 @@
 		   <tr>
 		    <td>
 				<div ng-repeat="team in teams">
+					<span class="glyphicon glyphicon-star"></span>
 					{{team}}
 				</div>
 				</td>
@@ -107,6 +109,7 @@
 		   <tr>
         	<td>
 				<div ng-repeat="item in channels">
+					<span class="glyphicon glyphicon-asterisk"></span>
 				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
 				</div>
 			</td>
@@ -122,6 +125,7 @@
 		   <tr>
 			    <td>
 					<div ng-repeat="item in directChannels">
+						<span class="glyphicon glyphicon-star-empty"></span>
 						<a href="#/directChats/{{item}}/{{userName}}">{{item}}</a>
 					</div>
 			    </td>

@@ -20,7 +20,8 @@
 
 
 .blank {
-    background-color:#FFFFFF   /* white */    
+    background-color:#FFFFFF;   /* white */    
+    line-height: 30%;
 }
 
 
