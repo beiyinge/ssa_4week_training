@@ -16,12 +16,13 @@
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
 		  <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
 		  
-			 <div ng-repeat="item in searchResults" >
-						 <blockquote>{{item.CHANNELNAME}}
-						 <br><span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
-						 <footer> {{item.MESSAGE}} </footer>
-						 </blockquote>
+			 <div ng-repeat="item in searchResults | filter:enteredSearchKeyword"
+					ng-bind-html="item | highlight:enteredSearchKeyword">
+						 
 			</div>
+			
+			
+		   
 		</div>
 				
 	</div>

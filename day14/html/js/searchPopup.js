@@ -23,7 +23,22 @@
 	};
 }
 //]
-); //end searchResultAppModule controller 
+)
+  .filter('highlight', function($sce) {
+    return function(item, phrase) {
+	  var messageTemp = item.MESSAGE;
+      if (phrase) messageTemp = messageTemp.replace(new RegExp('('+phrase+')', 'gi'),
+        '<span class="highlighted">$1</span>')
+
+		var formatedSearchResults =
+		 "<blockquote>" + item.CHANNELNAME +
+						" <br><span class='glyphicon glyphicon-user'></span><B>"+ item.SENDER + "</B> | " + item.DATE +
+						" <footer> "+ messageTemp + "</footer>" +
+						 "</blockquote>";
+						 
+      return $sce.trustAsHtml(formatedSearchResults)
+    }
+  }); //end searchResultAppModule controller 
 
 
 //var searchResultAppModule = angular.module('searchResultApp', ['ngRoute','ui.bootstrap']);
@@ -62,7 +77,6 @@
 
 				};
 				
-      
 
 
 
