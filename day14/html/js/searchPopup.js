@@ -4,23 +4,26 @@
 	menuApp.controller('SearchCtrl',function ($scope, searchResultsService)  {
 	console.log( count +', in SearchCtrl '+  $scope.enteredSearchKeyword);
 	
-	$scope.searchPopup = function () {
+	$scope.searchPopup = function (event) {
 		console.log( count +', opening pop up');
 		$scope.searchKeyword = $scope.enteredSearchKeyword;
 		
 		count = count+1;
 			  console.log ( count + ', in getSearchResults, ');
-			//  $scope.displayName = $routeParams.channelName;
-					
+			//  enter key
+				if (event.keyCode === 13) {	
 				searchResultsService.getSearchResultList($scope.searchKeyword, function(searchResults) {
 					  $scope.searchResults = searchResults;
 					 // $scope.channels = myChannelList;
 					  console.log ("searchResults=" + searchResults);
+					  document.getElementById("searchBtn").click();
 					});
-					
+				}
 	
 	
 	};
+	
+
 }
 //]
 )
