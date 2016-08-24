@@ -36,7 +36,7 @@
 
 		var formatedSearchResults =
 		 "<blockquote>" + item.CHANNELNAME +
-						" <br><span class='glyphicon glyphicon-user'></span><B>"+ userNameTemp + "</B> | " + item.DATE +
+						" <br><span class='glyphicon glyphicon-user'></span><B>"+ userNameTemp + "</B> | <span class='smallDate'>" + item.DATE +"</span>" +
 						" <footer> "+ messageTemp + "</footer>" +
 						 "</blockquote>";
 						 
