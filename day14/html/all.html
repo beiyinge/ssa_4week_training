@@ -9,9 +9,9 @@
 	 <td width="40%" align="rigth">
 	 <div align="rigth" ng-controller="SearchCtrl">
 					 &nbsp; &nbsp; <span class="glyphicon glyphicon-search"></span>
-					 <input ng-model="enteredSearchKeyword" type="text" size=10 ng-keypress="searchPopup($event);openSearchNav()" /> 
+					 <input ng-model="enteredSearchKeyword" type="text" size=10 ng-keypress="searchPopup($event);" /> 
 			
-					 <button id="searchBtn" onclick="openSearchNav()" ng-click="searchPopup($event)">Search
+					 <button id="searchBtn" onclick="openSearchNav()" style="display: none;" >Search
 					 </button>
 					 
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
