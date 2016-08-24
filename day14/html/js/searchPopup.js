@@ -27,12 +27,16 @@
   .filter('highlight', function($sce) {
     return function(item, phrase) {
 	  var messageTemp = item.MESSAGE;
+	  var userNameTemp = item.SENDER;
       if (phrase) messageTemp = messageTemp.replace(new RegExp('('+phrase+')', 'gi'),
+        '<span class="highlighted">$1</span>')
+		
+	  if (phrase) userNameTemp = userNameTemp.replace(new RegExp('('+phrase+')', 'gi'),
         '<span class="highlighted">$1</span>')
 
 		var formatedSearchResults =
 		 "<blockquote>" + item.CHANNELNAME +
-						" <br><span class='glyphicon glyphicon-user'></span><B>"+ item.SENDER + "</B> | " + item.DATE +
+						" <br><span class='glyphicon glyphicon-user'></span><B>"+ userNameTemp + "</B> | " + item.DATE +
 						" <footer> "+ messageTemp + "</footer>" +
 						 "</blockquote>";
 						 
