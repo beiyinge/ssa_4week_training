@@ -1,4 +1,4 @@
-var menuApp = angular.module('menuApp', ['ngRoute']);
+var menuApp = angular.module('menuApp', ['ngRoute','ngFileUpload']);
 var count = 1;
 var teamList =[];
 var myChannelList = [];
@@ -32,7 +32,7 @@ function deleteCookie(cname) {
 
 menuApp.config(function($routeProvider) {
     $routeProvider.
-    when('/', {
+    when('/login', {
         templateUrl: "logon.html",
         controller: 'loginCtrl'
     }).
@@ -53,7 +53,7 @@ menuApp.config(function($routeProvider) {
 		controller: 'getDirectChatsCtrl'
 	}).
     otherwise({
-        redirectTo: '/'
+        redirectTo: '/login'
     });
 }, ['$locationProvider', function($locationProvider) {
     $locationProvider.html5Mode = true;
@@ -91,7 +91,7 @@ menuApp.factory('logon', function($http) {
             console.log(userName +" logging in");
             $http({
                 method: 'GET',
-                url: 'http://localhost:8080/' + userName,
+                url: 'http://localhost:8080/login/' + userName,
                 cache: false
             }).success(callback);
         }
@@ -235,6 +235,8 @@ var getMenuCtrl = function($scope, channels, $routeParams) {
 			
 			myDirectList= $scope.directChannels;
 			
+			
+			
 			console.log("sends from menu ctrl direct"+ getCookie("UserName"));
 		});
 	}
@@ -284,6 +286,29 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
 		console.log($scope.userName +" chat  messages");
 		$scope.directChannels = myDirectList;
 		$scope.isDirectChat=false;
+		for(var i =0;i<channelChats.length;i++)
+		{
+		console.log(channelChats[i].FileName+" array values");
+			if (channelChats[i].FileName !=null)
+			{
+				var cfileext=channelChats[i].FileName.split(".")
+				if (cfileext[1]==='txt')
+				{
+					$scope.cfiletxt=cfileext[1];
+					console.log($scope.cfiletxt);
+				}
+				else if (cfileext[1]==='jpg')
+				{
+					$scope.cfilejpg=cfileext[1];
+					console.log($scope.cfilejpg);
+				}
+				
+				
+				console.log(cfileext[1]);
+			}
+		}
+			console.log($scope.channelChats);
+		
 		console.log('isDirectChat='+$scope.isDirectChat);
 
     });
@@ -334,6 +359,7 @@ menuApp.factory('messages', function($http){
 
 menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParams, dataService){
 	console.log('getDirectChatsCtrl:channelName=' + $routeParams.channelName + ',userName=' + $routeParams.userName);
+	
 	messages.list($routeParams.channelName, $routeParams.userName,function(messages) {
 
 		  console.log('messages.length=' + messages.length);
@@ -343,7 +369,27 @@ menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParam
 		  $scope.userName= getCookie("UserName");
 		  console.log($scope.userName +" direct chat messages");
 		  $scope.directChannels = myDirectList;
-		  $scope.isDirectChat=true;		  
+		  $scope.isDirectChat=true;		
+		for(var i =0;i<messages.length;i++)
+		{
+		console.log(messages[i].FileName +" array values");
+		
+			if (messages[i].FileName !=null)
+			{
+				var dfileext=messages[i].FileName.split(".")
+				if (dfileext[1]==='txt')
+				{
+					$scope.dfiletxt=dfileext[1];
+					console.log($scope.dfiletxt);
+				}
+				else if (dfileext[1]==='jpg')
+				{
+					$scope.dfilejpg=dfileext[1];
+					console.log($scope.dfilejpg);
+				}
+			}
+		}
+				  
 		  console.log('isDirectChat='+$scope.isDirectChat);		  
 
 	});
@@ -352,8 +398,8 @@ menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParam
         console.log('direct message to add', $scope.msg);
 		console.log('getcookie ', getCookie("UserName"));
 		
-        var user = getCookie("UserName"); //replaced the hardcoded username withe the getcookie method
-		
+         //replaced the hardcoded username withe the getcookie method
+		var user = getCookie("UserName");
 		console.log(user + " cookie username for sendDirectMessage");
 		
         var msg = $scope.msg;

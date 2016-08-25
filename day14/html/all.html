@@ -137,15 +137,26 @@
 			<div ng-repeat="item in channelChats" >
 			  <blockquote>
 			    <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
-			    <footer> {{item.MESSAGE}} </footer>
+			    <footer> 
+				<span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
+				
+				<span ng-show="item.FileName.length > 0 ">
+				<img ng-src="Uploads/{{item.FileName}}"  height="100" width="100" />{{item.MESSAGE}}</span>			
+				
+				</footer>
 			  </blockquote>
 			 </div>
 			 
 			 <div ng-repeat="item in messages" >
 			  <blockquote>
-			 <B>*{{item.SENDER}}</B> | {{item.DATE}}
+			 <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
 			 
-			 <footer>  {{item.MESSAGE}} </footer>
+			 <footer> 
+			 <span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
+				
+				<span ng-show="item.FileName.length > 0 ">
+				<img ng-src="Uploads/{{item.FileName}}"  height="100" width="100" />{{item.MESSAGE}}</span>	
+					</footer>
 			 </blockquote>
 			 </div>
          </td>
@@ -160,7 +171,7 @@
 				<div ng-hide="isDirectChat">
 					<form ng-submit="sendMessage()">				
 					Message: 
-				<a href="" data-toggle="modal" data-target="#uploadModal">
+				<a href="" data-toggle="modal" data-target="#uploadchannelModal">
 				  <span class="glyphicon glyphicon-plus"></span>
 				</a>
 		          <input type="text" ng-model="msg">
@@ -170,37 +181,85 @@
 				<div ng-show="isDirectChat">					
 					<form ng-submit="sendDirectMessage()">
 					Message: 
-					<a href="" data-toggle="modal" data-target="#uploadModal">
+					<a href="" data-toggle="modal" data-target="#uploaddirectModal">
 					  <span class="glyphicon glyphicon-plus"></span>
 					</a>
 					<input type="text" ng-model="msg">
 							 <input type="submit" value="send">
 					</form>
 				</div>	
-				<!-- Upload Modal -->
-				<div ng-controller="uploadfilectrl">
-					<div class="modal fade" id="uploadModal" role="dialog">
+				<!-- Upload channel Modal -->
+				<div >
+					<div class="modal fade" id="uploadchannelModal" role="dialog">
 						<div class="modal-dialog">
 
 						  <!-- Modal content-->
 						  <div class="modal-content" >
 							<div class="modal-header">
-							  <button type="button" class="close" data-dismiss="uploadModal">&times;</button>
-							  <h4 class="modal-title">Upload File</h4>
+							  <button type="button" class="close" data-dismiss="uploadchannelModal">&times;</button>
+							 
 							</div>
 							<div class="modal-body">				
-								<form name="formupload"  class="simple-form" ng-submit="uploadfile()" >
-									Select the file: <input 
-													type="file" 
-													ngf-select 
-													ng-model="filename" 
-													name="file" 
-													ngf-pattern="'image/*'"
-													accept="image/*" 
-													ngf-max-size="20MB" 
-													/><br /><br />	
-									<input type="submit" value="Upload File"  />
-								</form>			
+								<form  ng-controller="MyCtrl as up" name="up.upload_form">
+								<input type="text" ng-model="displayName" name="receiver" id="rid" >
+								 <h4 class="modal-title">Sending File from {{userName}} to **{{displayName}}** </h4>
+								<input 
+									type="file" 
+									ngf-select 
+									ng-model="up.file" 
+									name="file" 
+									ngf-pattern="'*'"
+									accept="*" 
+									ngf-max-size="20MB" 
+									/>
+									Message: <textarea ng-model="msg" width="100%"></textarea>
+							   <!--  Multiple files
+								<div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
+								Drop files: <div ngf-drop ng-model="up.files" class="drop-box">Drop</div> -->
+								<button type="submit" ng-click="up.submit()">submit</button>
+								<p>{{up.progress}}</p>
+							</form>		
+							</div>
+							<div class="modal-footer">
+							  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						  </div>
+						  
+						</div>
+					</div>
+				</div>
+				<!-- end of upload channel model-->
+				<!-- Upload direct Modal -->
+				<div >
+					<div class="modal fade" id="uploaddirectModal" role="dialog">
+						<div class="modal-dialog">
+
+						  <!-- Modal content-->
+						  <div class="modal-content" >
+							<div class="modal-header">
+							  <button type="button" class="close" data-dismiss="uploaddirectModal">&times;</button>
+							 
+							</div>
+							<div class="modal-body">				
+								<form  ng-controller="MydCtrl as up" name="up.upload_dform">
+								<input type="text" ng-model="displayName" name="receiver" id="rid" >
+								 <h4 class="modal-title">Sending File from {{userName}} to **{{displayName}}** </h4>
+								<input 
+									type="file" 
+									ngf-select 
+									ng-model="up.file" 
+									name="file" 
+									ngf-pattern="'*'"
+									accept="*" 
+									ngf-max-size="20MB" 
+									/>
+								Message: <textarea ng-model="msg" width="100%"></textarea>
+							   <!--  Multiple files
+								<div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
+								Drop files: <div ngf-drop ng-model="up.files" class="drop-box">Drop</div> -->
+								<button type="submit" ng-click="up.submit()">submit</button>
+								<p>{{up.progress}}</p>
+							</form>		
 							</div>
 							<div class="modal-footer">
 							  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

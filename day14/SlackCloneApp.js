@@ -21,11 +21,158 @@ var multer = require('multer');
 var app = express();
 app.use(express.static('html'));
 
+//app.use('/Uploads/', express.static('Uploads'));
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 // all environments
 app.set('port', process.env.PORT || 8080);
+
+
+var storage = multer.diskStorage({ //multers disk storage settings
+	destination: function (req, file,cb) {
+		console.log("1");
+		
+		cb(null, 'html/Uploads/');
+	},
+	filename: function (req, file,cb) {
+		console.log("2");
+		var datetimestamp = Date.now();
+		
+		console.log(file);
+		console.log( file.originalname);
+		cb(null, file.originalname);
+		
+	}
+});
+
+var upload = multer({ //multer settings
+				storage: storage
+			}).single('file');
+
+/** API path that will upload the files */
+app.post('/Cupload/', function(req, res) {
+	upload(req,res,function(err){
+        console.log(req.body.users);
+        console.log(req.body.msg);
+		console.log(req.body.receiver);
+		console.log(req.file.filename);
+		var message = req.body.msg;
+		var channel =req.body.receiver;
+		var user = req.body.users
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1; //January is 0!
+
+		var yyyy = today.getFullYear();
+
+		if (dd < 10) { //-- ensure 2-digit day
+			dd = '0' + dd
+		}
+		if (mm < 10) { //-- ensure 2-digit month
+			mm = '0' + mm
+		}
+
+		var time = today.getTime();
+		var hour = today.getHours();
+		var minute = today.getMinutes();
+		var second = today.getSeconds();
+		if (hour < 10) { //-- ensure 2-digit hour
+			hour = '0' + hour
+		}
+		if (minute < 10) { //-- ensure 2-digit minute
+			minute = '0' + minute
+		}
+		if (second < 10) { //-- ensure 2-digit second
+			second = '0' + second
+		}
+
+		//-- string the timestamp together
+		var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
+		var filename = req.file.filename;
+		slackdb.insertUploadChannelChat(db, message, channel, user, today,filename).then( //done);
+			function(val) {
+				console.log('****/message/, val ' + val + '*');
+				//json
+				res.json({error_code:0,err_desc:null});
+
+			},
+			function(err) {
+				res.status(500);
+				res.json({error_code:1,err_desc:err});
+					 return;
+			}
+		);
+			// if(err){
+				 // res.json({error_code:1,err_desc:err});
+				 // return;
+			// }
+		   // res.json({error_code:0,err_desc:null});
+	});
+});
+
+
+app.post('/Dupload/', function(req, res) {
+	upload(req,res,function(err){
+         console.log(req.body.users);
+        console.log(req.body.msg);
+		console.log(req.body.receiver);
+		console.log(req.file.filename);
+		var message = req.body.msg;
+		var channel =req.body.receiver;
+		var user = req.body.users
+		var today = new Date();
+		var dd = today.getDate();
+		var mm = today.getMonth() + 1; //January is 0!
+
+		var yyyy = today.getFullYear();
+
+		if (dd < 10) { //-- ensure 2-digit day
+			dd = '0' + dd
+		}
+		if (mm < 10) { //-- ensure 2-digit month
+			mm = '0' + mm
+		}
+
+		var time = today.getTime();
+		var hour = today.getHours();
+		var minute = today.getMinutes();
+		var second = today.getSeconds();
+		if (hour < 10) { //-- ensure 2-digit hour
+			hour = '0' + hour
+		}
+		if (minute < 10) { //-- ensure 2-digit minute
+			minute = '0' + minute
+		}
+		if (second < 10) { //-- ensure 2-digit second
+			second = '0' + second
+		}
+
+		//-- string the timestamp together
+		var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
+		var filename = req.file.filename;
+		slackdb.insertUploadDirectChat(db, user,channel,message, today,filename).then( //done);
+			function(val) {
+				console.log('****/message/, val ' + val + '*');
+				//json
+				res.json({error_code:0,err_desc:null});
+
+			},
+			function(err) {
+				res.status(500);
+				res.json({error_code:1,err_desc:err});
+					 return;
+			}
+		);
+			
+		if(err){
+			 res.json({error_code:1,err_desc:err});
+			 return;
+		}
+		 res.json({error_code:0,err_desc:null});
+	});
+});
 //app.set('views', __dirname + '/views');
 //app.set('view engine', 'ejs');
 //app.use(express.favicon());
@@ -45,7 +192,7 @@ app.set('port', process.env.PORT || 8080);
 
 
 //app.get('/', getDefaultIndex);
-app.get('/:userName', getSlackUserID);
+app.get('/login/:userName', getSlackUserID);
 
 app.get('/channel/:userName', getChannelByUser);
 app.get('/channelChats/:channelName', getChannelChatByChannelName);
@@ -111,10 +258,10 @@ app.post('/message/', function(req, res) {
 });
 
 app.post('/saveDirectMessage/', function(req, res) {
-    var message = req.body.message;
+   
     var sender = req.body.sender;
     var receiver = req.body.receiver;
-
+    var message = req.body.message;
     var today = new Date();
     var dd = today.getDate();
     var mm = today.getMonth() + 1; //January is 0!
@@ -147,7 +294,7 @@ app.post('/saveDirectMessage/', function(req, res) {
 
 
     //console.log('in /message/, message=' + message);
-    slackdb.insertDirectChat(db, message, sender, receiver, today).then( 
+    slackdb.insertDirectChat(db,sender, receiver,message, today).then( 
         function(val) {
             console.log('****/saveDirectMessage/, val ' + val + '*' + ' inserted new direct message: ' + message);
             //json
