@@ -53,13 +53,21 @@
 				<div ng-show="success">Team {{name}} is created successfully.</div>
 				<div class="modal-body">				
 					<form name="form" novalidate class="simple-form" ng-submit="form.$valid && update()" >
-						Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	
-						<div ng-show="form.$submitted || form.uName.$touched">
-							<div ng-show="form.uName.$error.required">Team name cannot be empty.</div>
+					
+						<div class="form-group">
+							<label for="uName">Name</label>
+							<input type="text" class="form-control" ng-model="name" name="uName" required="" id="uName"  >
 						</div>
-						Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />			
-						
-						<input type="submit" value="Save" ng-disabled="isDisabled" />
+						<!-- Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	 -->
+						<div ng-show="form.$submitted || form.uName.$touched">
+							<div ng-show="form.uName.$error.required"><span style="color:red">Team name cannot be empty.</span></div>
+						</div>
+						<!-- Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />		 -->	
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea class="form-control" rows="3" ng-model="desc" id="description"></textarea>
+						</div>	
+						<input type="submit" class="btn btn-default" value="Save" ng-disabled="isDisabled" />
 					</form>			
 				</div>
 				<div class="modal-footer">
