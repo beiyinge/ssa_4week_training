@@ -66,7 +66,7 @@ menuApp.factory('logout', function($http) {
             console.log(userName +" loggingout");
             $http({
                 method: 'GET',
-                url: '/' + userName,
+                url: 'http://localhost:8080/' + userName,
                 cache: true
             }).success(callback);
         }
@@ -79,7 +79,7 @@ var setUserID = function($scope, logout, $location) {
     deleteCookie("UserName");
 	myChannelList = [];
 	myDirectList=[];
-    $location.path("/");
+    $location.path("/login");
 };
 
 
@@ -91,16 +91,15 @@ menuApp.factory('logon', function($http) {
             console.log(userName +" logging in");
             $http({
                 method: 'GET',
-
                 url: 'http://localhost:8080/login/' + userName,
-
                 cache: false
             }).success(callback);
         }
     };
 });
 
-var getUserID = function($scope, logon, $location) {
+
+var getUserID = function($scope, logon, $location,$window) {
 	console.log("when refreshing the page " + getCookie("UserName"));
 	
 		
@@ -124,9 +123,13 @@ var getUserID = function($scope, logon, $location) {
             }
             if (loggedin === true) {
 				console.log("sends from logon controller  "+ getCookie("UserName"));
+				
                 $location.path("/" +  getCookie("UserName"));
             } else {
-                $location.path("/");
+				$window.alert('Invalid Username /Password');
+				$scope.username='';
+				$scope.password='';
+                $location.path("/login");
             }
 
         });
@@ -134,7 +137,6 @@ var getUserID = function($scope, logon, $location) {
 
 
 };
-
 
 menuApp.controller('loginCtrl', getUserID);
 
@@ -272,7 +274,7 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
     count = count + 1;
     console.log(count + ', in ChatMessageCtrl, ' + $routeParams.channelName);
     $scope.displayName = $routeParams.channelName;
-
+	$scope.directmsg = 'channel';
     console.log('in ChatMessageCtrl, myChannelList=' + myChannelList);
      console.log(myChannelList.length + " chatmessage");
 	 if (myChannelList.length === 0)
@@ -363,11 +365,11 @@ menuApp.factory('messages', function($http){
 
 menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParams, dataService){
 	console.log('getDirectChatsCtrl:channelName=' + $routeParams.channelName + ',userName=' + $routeParams.userName);
-	
+	$scope.directmsg = 'direct';
+	$scope.displayName = $routeParams.channelName;
 	messages.list($routeParams.channelName, $routeParams.userName,function(messages) {
 
 		  console.log('messages.length=' + messages.length);
-		  $scope.displayName = $routeParams.channelName;
 		  $scope.messages = messages;
 		  $scope.teams = teamList;
 		  $scope.channels = myChannelList;

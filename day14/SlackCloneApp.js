@@ -52,6 +52,28 @@ var upload = multer({ //multer settings
 			}).single('file');
 
 /** API path that will upload the files */
+var storage = multer.diskStorage({ //multers disk storage settings
+	destination: function (req, file,cb) {
+		console.log("1");
+		
+		cb(null, 'html/Uploads/');
+	},
+	filename: function (req, file,cb) {
+		console.log("2");
+		var datetimestamp = Date.now();
+		
+		console.log(file);
+		console.log( file.originalname);
+		cb(null, file.originalname);
+		
+	}
+});
+
+var upload = multer({ //multer settings
+				storage: storage
+			}).single('file');
+
+/** API path that will upload the files */
 app.post('/Cupload/', function(req, res) {
 	upload(req,res,function(err){
         console.log(req.body.users);
@@ -91,6 +113,10 @@ app.post('/Cupload/', function(req, res) {
 		//-- string the timestamp together
 		var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
 		var filename = req.file.filename;
+		var chattext = req.body.chatvalue;
+		console.log(chattext);
+		if (chattext ==='channel')
+		{
 		slackdb.insertUploadChannelChat(db, message, channel, user, today,filename).then( //done);
 			function(val) {
 				console.log('****/message/, val ' + val + '*');
@@ -104,6 +130,23 @@ app.post('/Cupload/', function(req, res) {
 					 return;
 			}
 		);
+		} else if(chattext ==='direct')
+		{
+			
+			slackdb.insertUploadDirectChat(db, user,channel,message, today,filename).then( //done);
+			function(val) {
+				console.log('****/message/, val ' + val + '*');
+				//json
+				res.json({error_code:0,err_desc:null});
+
+			},
+			function(err) {
+				res.status(500);
+				res.json({error_code:1,err_desc:err});
+					 return;
+			}
+		);
+		}
 			// if(err){
 				 // res.json({error_code:1,err_desc:err});
 				 // return;
@@ -111,7 +154,6 @@ app.post('/Cupload/', function(req, res) {
 		   // res.json({error_code:0,err_desc:null});
 	});
 });
-
 
 app.post('/Dupload/', function(req, res) {
 	upload(req,res,function(err){

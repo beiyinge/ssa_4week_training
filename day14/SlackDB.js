@@ -116,14 +116,14 @@ console.log ('Done, insertChannelTableSql='+insertChannelTableSql);
 var insertChannelChatSql =  "INSERT INTO  CHANNEL_CHAT (CHANNELNAME, SENDER , MESSAGE , DATE,FileName ) "+
 " values " +
 "( 'A_channel', 'charles', 'am working on saving messages.', '2016-08-05 12:45:00',Null), " +
-"( 'A_channel', 'xuemei', 'We are planing to use js-beatutify to format files.', '2016-08-05 12:45:00','Tulips.jpg'), " +
+"( 'A_channel', 'xuemei', 'We are planing to use js-beatutify to format files.', '2016-08-05 12:45:00',NULL), " +
  "('A_channel','xuemei','Let''s use bootstrap to make UI pretty','2016-08-05 12:45:00',NULL), " +
  "('A_channel','beiying','I am working on creating team.','2016-08-05 12:45:00',NULL), " +
  "('A_channel','josephine','I am working mocha test scripts.','2016-08-19 14:08:08',Null), " +
  "('A_channel','xuemei','Thank you for taking care this josephine.','2016-08-19 14:10:08',NULL), " +
  "('A_channel','charles','New operator seperation is very important.','2016-08-19 14:14:53',NULL), " +
- "('C_channel','josephine','hello','2016-08-19 14:15:12','Koala.jpg'), " +
- "('A_channel','john','dependance Injection.','2016-08-19 14:22:54','Koala.jpg'), " +
+ "('C_channel','josephine','hello','2016-08-19 14:15:12',NULL), " +
+ "('A_channel','john','dependance Injection.','2016-08-19 14:22:54',NULL), " +
  "('C_channel','charles','infrastralized data management infrastructure automation','2016-08-19 14:23:04',NULL), " +
  "('A_channel','josephine','angularjs unit testing','2016-08-19 14:33:32',NULL), " +
  "('C_channel','charles','Microservice is a subset of  SOA','2016-08-19 14:33:41',NULL), " +
@@ -144,10 +144,10 @@ var insertDirectChatSql = "INSERT INTO DIRECT_CHAT (SENDER,RECIEVER,MESSAGE,DATE
  " VALUES " +
  " ('xuemei','beiying','github is cool','2016-08-02 12:45:00',NULL), " +
  " ('beiying','xuemei','learn git','2016-08-02 12:40:00',NULL), " +
- " ('josephine','xuemei','git clone','2016-08-02 12:48:00','Tulips.jpg'), " +
+ " ('josephine','xuemei','git clone','2016-08-02 12:48:00',NULL), " +
  " ('xuemei','josephine','I just pushed latest code, please pull.','2016-08-02 12:50:00',NULL), " +
  " ('charles','beiying','we are learning Angular JS.','2016-08-22 10:10:36',NULL), " +
- " ('beiying','charles','We can try to isntall docker toolbox on our windows 7','2016-08-22 10:10:47','Tulips.jpg'), " +
+ " ('beiying','charles','We can try to isntall docker toolbox on our windows 7','2016-08-22 10:10:47',NULL), " +
  " ('charles','beiying','Just tried, docker works now on my laptop.','2016-08-22 13:15:38',NULL); "
  
  db.run(insertDirectChatSql);
@@ -205,7 +205,7 @@ exports.insertChannelChat = function  (db, message, toChannel, fromUser, today) 
   
 }
 
-<<<<<<< HEAD
+
 exports.insertUploadChannelChat = function  (db, message, toChannel, fromUser, today,filename) {
 	
 	 var insertUploadChannelChat = "INSERT INTO CHANNEL_CHAT (CHANNELNAME, SENDER, MESSAGE, DATE,FileName) " +
@@ -271,18 +271,6 @@ exports.createTeam = function  (db, name, desc, user, today) {
 				if (err) {
 					reject(err);
 				}
-=======
-exports.insertDirectChat = function  (db, message, sender, receiver, today) {
-
-	 var insertDirectChatSql = "INSERT INTO DIRECT_CHAT (SENDER, RECIEVER, MESSAGE, DATE) " +
-    "VALUES ('" + sender + "','" + receiver +"', '"+ message + "','" + today + "');";
-	 
- 	 return new Promise(function(resolve, reject) {
-			db.run(insertDirectChatSql, function(err){
- 				if (err) {
- 					reject(err);
- 				}					
->>>>>>> 1c3c063be26451df12941e6a381d33e613acb3b1
 				resolve(); 
 			});
  
