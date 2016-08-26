@@ -66,7 +66,7 @@ menuApp.factory('logout', function($http) {
             console.log(userName +" loggingout");
             $http({
                 method: 'GET',
-                url: 'http://localhost:8080/' + userName,
+                url: '/' + userName,
                 cache: true
             }).success(callback);
         }
@@ -91,7 +91,7 @@ menuApp.factory('logon', function($http) {
             console.log(userName +" logging in");
             $http({
                 method: 'GET',
-                url: 'http://localhost:8080/login/' + userName,
+                url: '/login/' + userName,
                 cache: false
             }).success(callback);
         }

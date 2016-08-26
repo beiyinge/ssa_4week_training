@@ -63,7 +63,7 @@
 		  
             $http({
               method: 'GET',
-              url:    'http://localhost:8080/searchMsg/'+searchKeyword+'/userName/'+getCookie("UserName"),
+              url:    '/searchMsg/'+searchKeyword+'/userName/'+getCookie("UserName"),
               cache: false
             }).success(callback);
           }
