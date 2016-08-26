@@ -1,4 +1,4 @@
-var menuApp = angular.module('menuApp', ['ngRoute','ngFileUpload']);
+var menuApp = angular.module('menuApp', ['ngRoute','ngFileUpload', 'ngScrollable']);
 var count = 1;
 var teamList =[];
 var myChannelList = [];
@@ -363,6 +363,7 @@ menuApp.controller('getDirectChatsCtrl', function ($scope, messages, $routeParam
 	messages.list($routeParams.channelName, $routeParams.userName,function(messages) {
 
 		  console.log('messages.length=' + messages.length);
+		  $scope.displayName = $routeParams.channelName;
 		  $scope.messages = messages;
 		  $scope.teams = teamList;
 		  $scope.channels = myChannelList;

@@ -9,23 +9,26 @@
 	 <td width="40%" align="rigth">
 	 <div align="rigth" ng-controller="SearchCtrl">
 					 &nbsp; &nbsp; <span class="glyphicon glyphicon-search"></span>
-					 <input ng-model="enteredSearchKeyword" type="text" size=10/> 
+					 <input ng-model="enteredSearchKeyword" type="text" size=10 ng-keypress="searchPopup($event);" /> 
 			
-					 <button onclick="openSearchNav()" ng-click="searchPopup()">Search
+					 <button id="searchBtn" onclick="openSearchNav()" style="display: none;" >Search
 					 </button>
+					 
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
-		  <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
+		  &nbsp; &nbsp; <span align="center"><B>Search Results</B></span>&nbsp; <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
 		  
-			 <div ng-repeat="item in searchResults" >
-						 <blockquote>{{item.CHANNELNAME}}
-						 <br><span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
-						 <footer> {{item.MESSAGE}} </footer>
-						 </blockquote>
+			 <div ng-repeat="item in searchResults | filter:enteredSearchKeyword"
+					ng-bind-html="item | highlight:enteredSearchKeyword">
+						 
 			</div>
+			
+			
+		   
 		</div>
 				
-	</div>
+		</div>
     </td>	
+		
 	 <td valign="top" align="rigth">
 	&nbsp;&nbsp;<span class="glyphicon glyphicon-option-vertical" onclick="openRightNav()"></span>
 	
@@ -50,13 +53,21 @@
 				<div ng-show="success">Team {{name}} is created successfully.</div>
 				<div class="modal-body">				
 					<form name="form" novalidate class="simple-form" ng-submit="form.$valid && update()" >
-						Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	
-						<div ng-show="form.$submitted || form.uName.$touched">
-							<div ng-show="form.uName.$error.required">Team name cannot be empty.</div>
+					
+						<div class="form-group">
+							<label for="uName">Name</label>
+							<input type="text" class="form-control" ng-model="name" name="uName" required="" id="uName"  >
 						</div>
-						Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />			
-						
-						<input type="submit" value="Save" ng-disabled="isDisabled" />
+						<!-- Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	 -->
+						<div ng-show="form.$submitted || form.uName.$touched">
+							<div ng-show="form.uName.$error.required"><span style="color:red">Team name cannot be empty.</span></div>
+						</div>
+						<!-- Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />		 -->	
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea class="form-control" rows="3" ng-model="desc" id="description"></textarea>
+						</div>	
+						<input type="submit" class="btn btn-default" value="Save" ng-disabled="isDisabled" />
 					</form>			
 				</div>
 				<div class="modal-footer">
@@ -76,7 +87,7 @@
  
 	<table border=1 width="100%" >
 		<tr>
-	<td width="30%" valign="top" class="leftMenuBKGrnd">
+	<td width="15%" valign="top" class="leftMenuBKGrnd">
         
 		
 		 <table border=0 width="100%" >
@@ -87,13 +98,17 @@
 			    
 			    </td>
 		   </tr>
-		   <tr >
+		   <tr>
 		    <td>
 				<div ng-repeat="team in teams">
+					<span class="glyphicon glyphicon-star"></span>
 					{{team}}
 				</div>
-			</td>
+				</td>
 		   </tr>
+			
+			 <tr><td>&nbsp;</td></tr>		<!-- skip a line before doing Channel Names -->
+			 
 		    <tr>
 			    <td>
 			    <B>Channel Names</B>
@@ -102,10 +117,14 @@
 		   <tr>
         	<td>
 				<div ng-repeat="item in channels">
+					<span class="glyphicon glyphicon-asterisk"></span>
 				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
 				</div>
 			</td>
 		   </tr>
+
+			<tr><td>&nbsp;</td></tr>		<!-- skip a line before doing Direct Message List -->
+
 		  <tr>
 			    <td>
 			      <B>Direct Message List</B>
@@ -114,6 +133,7 @@
 		   <tr>
 			    <td>
 					<div ng-repeat="item in directChannels">
+						<span class="glyphicon glyphicon-star-empty"></span>
 						<a href="#/directChats/{{item}}/{{userName}}">{{item}}</a>
 					</div>
 			    </td>
@@ -125,6 +145,7 @@
 		
 	</td>	
 	<td width="70%" valign=top>
+	<div ng-scrollable="{scrollX:'none',scrollY:'right'}" style="width: 100%; height: 600px;">
 		<table valign=top width="100%" border=0>
 		  <tr>
 		    <td>
@@ -134,9 +155,9 @@
 		 <tr>
 		 <td class="centerMessage">
 		 
-			<div ng-repeat="item in channelChats" >
+			<div ng-repeat="item in channelChats">
 			  <blockquote>
-			    <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
+			    <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | <span class="smallDate">{{item.DATE}}</span>
 			    <footer> 
 				<span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
 				
@@ -145,23 +166,26 @@
 				
 				</footer>
 			  </blockquote>
+				<p class="blank">&nbsp;</p>		<!-- color break between items, poor man's solution --> 
 			 </div>
 			 
 			 <div ng-repeat="item in messages" >
 			  <blockquote>
-			 <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
+			 <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | <span class="smallDate">{{item.DATE}}</span>
+
 			 
-			 <footer> 
+			 <footer class="right"> 
 			 <span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
 				
 				<span ng-show="item.FileName.length > 0 ">
 				<img ng-src="Uploads/{{item.FileName}}"  height="100" width="100" />{{item.MESSAGE}}</span>	
-					</footer>
+			</footer>
 			 </blockquote>
+			 <p class="blank">&nbsp;</p>		<!-- color break between items, poor man's solution --> 
 			 </div>
          </td>
 		 </tr>
-		 <tr>
+		 <tr class="footerMessage">
 		   <td>
 		   {{channelMsg}}
 		   <hr>
@@ -274,6 +298,7 @@
 		   </td>
 		 </tr>
        </table>
+	   </div>
 	</td>
 
 
