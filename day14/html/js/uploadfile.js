@@ -1,33 +1,4 @@
 
-// menuApp.factory('Upload', function($http) {
-	// console.log("entering menuApp.factory.teamService");
-    // return {
-        // update: function(file) ({
-            // url: '/upload/', //webAPI exposed to upload the file
-            // data:{file:file} //pass file as data, should be user ng-model
-        // }).then(function (resp) { //upload function returns a promise
-            // if(resp.data.error_code === 0){ //validate success
-                // $window.alert('Success ' + resp.config.data.file.name + 'uploaded. Response: ');
-            // } else {
-                // $window.alert('an error occured');
-            // }
-        // }, function (resp) { //catch error
-            // console.log('Error status: ' + resp.status);
-            // $window.alert('Error status: ' + resp.status);
-        // });
-    // };
-// });
-
-// menuApp.controller('MyCtrl', function ($scope, Upload){
-	//console.log('MyCtrl:teamName=' + $scope.name + ',desc=' + $scope.desc);
-	
-	// $scope.submit = function() {
-		// if (document.upload_form.file.$valid && document.file) { //check if from is valid
-          // Upload.upload(document.file); //call upload function
-        // }
-	// };
-	
-// });
 
 menuApp.controller('MyCtrl',['Upload','$window','$scope',function(Upload,$window,$scope){
     var vm = this;
@@ -36,14 +7,14 @@ menuApp.controller('MyCtrl',['Upload','$window','$scope',function(Upload,$window
     vm.submit = function(){ //function to call on form submit
 	var receivername= $scope.displayName;
     var msg=$scope.msg;
-	
+	var chatvalue=$scope.directmsg;
 	console.log("uploadfile ctrl:" +receivername +" "+user);
         if (vm.upload_form.file.$valid && vm.file) { //check if from is valid
-            vm.upload(vm.file, user,receivername,msg); //call upload function
+            vm.upload(vm.file, user,receivername,msg,chatvalue); //call upload function
         }
     }
     
-    vm.upload = function (file,users,receiver,msg) {
+    vm.upload = function (file,users,receiver,msg,chatvalue) {
 		console.log(users +" "+receiver+" "+msg);
         Upload.upload({
 			method: 'POST',
@@ -52,19 +23,24 @@ menuApp.controller('MyCtrl',['Upload','$window','$scope',function(Upload,$window
 					file:file,
 					users: users,
                     receiver:receiver,
-                    msg:msg
+                    msg:msg,
+					chatvalue:chatvalue
 			} //pass file as data, should be user ng-model
         }).then(function (resp) { //upload function returns a promise
             if(resp.data.error_code === 0){ //validate success
 				
-                $window.alert('Success ' + resp.config.data.file.name + ' uploaded. Response: ');
+                //$window.alert('Success ' + resp.config.data.file.name + ' uploaded. Response: ');
                 var newMessage = {					
                     SENDER: users,
                     DATE: new Date().toString(),
                     MESSAGE: msg,
 					FileName:resp.config.data.file.name
                 };
-				$scope.channelChats.push(newMessage);
+				if (chatvalue === 'channel'){
+					 $scope.channelChats.push(newMessage);}
+				else if(chatvalue === 'direct'){
+					 $scope.messages.push(newMessage);
+				}
             } else {
                 $window.alert('an error occured');
             }
@@ -81,53 +57,3 @@ menuApp.controller('MyCtrl',['Upload','$window','$scope',function(Upload,$window
 }]);
 
 
-menuApp.controller('MydCtrl',['Upload','$window','$scope',function(Upload,$window,$scope){
-    var vm = this;
-	var user = getCookie("UserName");
-    console.log("dialog upload"+user);
-    vm.submit = function(){ //function to call on form submit
-	var receivername= $scope.displayName;
-	var msg =$scope.msg;
-	console.log("uploadfile ctrl:" +receivername +" "+user);
-        if (vm.upload_dform.file.$valid && vm.file) { //check if from is valid
-            vm.upload(vm.file, user,receivername,msg); //call upload function
-        }
-    }
-    
-    vm.upload = function (file,users,receiver,msg) {
-		console.log(users +" "+receiver);
-        Upload.upload({
-			method: 'POST',
-            url: '/Dupload/', //webAPI exposed to upload the file
-            data:{
-					file:file,
-					users: users,
-                    receiver:receiver,
-                    msg:msg
-			}, //pass file as data, should be user ng-model
-             cache: false
-        }).then(function (resp) { //upload function returns a promise
-            if(resp.data.error_code === 0){ //validate success
-				
-                $window.alert('Success ' + resp.config.data.file.name + ' uploaded. Response: ');
-				var newMessage = {					
-                    SENDER: user,
-					RECEIVER: receiver,
-                    DATE: new Date().toString(),
-                    MESSAGE: msg
-                };
-                $scope.messages.push(newMessage);
-            } else {
-                $window.alert('an error occured');
-            }
-        }, function (resp) { //catch error
-            console.log('Error status: ' + resp.status);
-            $window.alert('Error status: ' + resp.status);
-        }, function (evt) { 
-            console.log(evt);
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
-            console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
-            vm.progress = 'progress: ' + progressPercentage + '% '; // capture upload progress
-        });
-    };
-}]);

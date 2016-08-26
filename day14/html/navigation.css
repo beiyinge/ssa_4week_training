@@ -1,6 +1,6 @@
 /* The side navigation menu */
 .rightSidenav {
-    height: 50%; /* 100% Full-height */
+    height: 10%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
@@ -8,7 +8,7 @@
     right: 0;
     background-color: #eff2f5; /* light grey*/
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 60px; /* Place content 60px from the top */
+    padding-top: 0px; /* Place content 60px from the top */
     transition: 0.5s; /* 0.5 second transition effect to slide in the rightSidenav */
 }
 
@@ -32,9 +32,9 @@
 .rightSidenav .closebtn {
     position: absolute;
     top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    right: 10px;
+    font-size: 20px;
+    margin-left: 30px;
 }
 
 /* Style page content - use this if you want to push the page content to the left when you open the side navigation */
@@ -51,7 +51,7 @@
 
 
 .searchSidenav {
-    height: 100%;
+    height: 500px;
     width: 0;
     position: fixed;
     z-index: 1;
@@ -60,7 +60,7 @@
     background-color: #eff2f5;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 60px;
+    padding-top: 0px;
 }
 
 .searchSidenav a {
@@ -72,20 +72,23 @@
     transition: 0.3s
 }
 
+
+/* When you mouse over the navigation links, change their color */
 .searchSidenav a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
+    color: #fff;
+	background-color:#555;
 }
 
-.searchSidenav .closebtn {
+.searchSidenav .closeSearchbtn {
     position: absolute;
     top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    right: 10px;
+    font-size: 20px;
+    margin-left: 20px;
 }
 
 
 @media screen and (max-height: 450px) {
-  .searchSidenav {padding-top: 15px;}
+  .searchSidenav {padding-top: 0px;}
   .searchSidenav a {font-size: 18px;}
 }

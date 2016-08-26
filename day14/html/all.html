@@ -1,33 +1,37 @@
 
-<table align="right" width="100%">
+<table align="right" width="100%" >
    <tr>
-   <td width="60%">
+   <td width="40%">
    <b>Hello</b>: <label id="lblUsername"><i>{{userName}}</i></label>
 	 </td>
 
 
-	 <td width="40%" align="rigth">
+	<td width="40%" align="right">
 	 <div align="rigth" ng-controller="SearchCtrl">
-					 &nbsp; &nbsp; <span class="glyphicon glyphicon-search"></span>
-					 <input ng-model="enteredSearchKeyword" type="text" size=10/> 
+					 &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; <span class="glyphicon glyphicon-search"></span>
+					 <input ng-model="enteredSearchKeyword" type="text" size=10 ng-keypress="searchPopup($event);" /> 
 			
-					 <button onclick="openSearchNav()" ng-click="searchPopup()">Search
+					 <button id="searchBtn" onclick="openSearchNav()" style="display: none;" >Search
 					 </button>
+					 
 			<div id="mySearchSidenav" class="searchSidenav" align="left">
-		  <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
+		  &nbsp; &nbsp; <span align="center"><B>Search Results</B></span>&nbsp; <a href="javascript:void(0)" class="closeSearchbtn" onclick="closeSearchNav()">&times;</a>
 		  
-			 <div ng-repeat="item in searchResults" >
-						 <blockquote>{{item.CHANNELNAME}}
-						 <br><span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
-						 <footer> {{item.MESSAGE}} </footer>
-						 </blockquote>
+			 <div ng-repeat="item in searchResults | filter:enteredSearchKeyword"
+					ng-bind-html="item | highlight:enteredSearchKeyword">
+						 
 			</div>
+			
+			
+		   
 		</div>
 				
-	</div>
+		</div>
     </td>	
-	 <td valign="top" align="rigth">
-	&nbsp;&nbsp;<span class="glyphicon glyphicon-option-vertical" onclick="openRightNav()"></span>
+	 <td valign="top" align="justify">
+	 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; 
+	 &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; 
+	<i>Menu</i>&nbsp; <span class="glyphicon glyphicon-list" onclick="openRightNav()"></span>
 	
 	<div ng-controller="teamCtrl">	
 		<div id="myRightSidenav" class="rightSidenav" align="left">
@@ -50,13 +54,21 @@
 				<div ng-show="success">Team {{name}} is created successfully.</div>
 				<div class="modal-body">				
 					<form name="form" novalidate class="simple-form" ng-submit="form.$valid && update()" >
-						Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	
-						<div ng-show="form.$submitted || form.uName.$touched">
-							<div ng-show="form.uName.$error.required">Team name cannot be empty.</div>
+					
+						<div class="form-group">
+							<label for="uName">Name</label>
+							<input type="text" class="form-control" ng-model="name" name="uName" required="" id="uName"  >
 						</div>
-						Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />			
-						
-						<input type="submit" value="Save" ng-disabled="isDisabled" />
+						<!-- Name: <input type="text" ng-model="name" name="uName" required=""/><br /><br />	 -->
+						<div ng-show="form.$submitted || form.uName.$touched">
+							<div ng-show="form.uName.$error.required"><span style="color:red">Team name cannot be empty.</span></div>
+						</div>
+						<!-- Description: <textarea ng-model="desc" width="100%"></textarea><br /><br />		 -->	
+						<div class="form-group">
+							<label for="description">Description</label>
+							<textarea class="form-control" rows="3" ng-model="desc" id="description"></textarea>
+						</div>	
+						<input type="submit" class="btn btn-default" value="Save" ng-disabled="isDisabled" />
 					</form>			
 				</div>
 				<div class="modal-footer">
@@ -76,7 +88,7 @@
  
 	<table border=1 width="100%" >
 		<tr>
-	<td width="30%" valign="top" class="leftMenuBKGrnd">
+<td width="15%" valign="top" class="leftMenuBKGrnd">
         
 		
 		 <table border=0 width="100%" >
@@ -87,13 +99,17 @@
 			    
 			    </td>
 		   </tr>
-		   <tr >
+		   <tr>
 		    <td>
 				<div ng-repeat="team in teams">
+					<span class="glyphicon glyphicon-star"></span>
 					{{team}}
 				</div>
-			</td>
+				</td>
 		   </tr>
+			
+			 <tr><td>&nbsp;</td></tr>		<!-- skip a line before doing Channel Names -->
+			 
 		    <tr>
 			    <td>
 			    <B>Channel Names</B>
@@ -102,10 +118,14 @@
 		   <tr>
         	<td>
 				<div ng-repeat="item in channels">
+					<span class="glyphicon glyphicon-asterisk"></span>
 				  <a href="#/channelChats/{{item.CHANNELNAME}}">{{item.CHANNELNAME}}</a>
 				</div>
 			</td>
 		   </tr>
+
+			<tr><td>&nbsp;</td></tr>		<!-- skip a line before doing Direct Message List -->
+
 		  <tr>
 			    <td>
 			      <B>Direct Message List</B>
@@ -114,6 +134,7 @@
 		   <tr>
 			    <td>
 					<div ng-repeat="item in directChannels">
+						<span class="glyphicon glyphicon-star-empty"></span>
 						<a href="#/directChats/{{item}}/{{userName}}">{{item}}</a>
 					</div>
 			    </td>
@@ -123,8 +144,9 @@
 	
 	
 		
-	</td>	
+	</td>		
 	<td width="70%" valign=top>
+	
 		<table valign=top width="100%" border=0>
 		  <tr>
 		    <td>
@@ -136,7 +158,7 @@
 		 
 			<div ng-repeat="item in channelChats" >
 			  <blockquote>
-			    <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
+			    <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | | <span class="smallDate">{{item.DATE}}</span>
 			    <footer> 
 				<span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
 				
@@ -149,7 +171,7 @@
 			 
 			 <div ng-repeat="item in messages" >
 			  <blockquote>
-			 <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | {{item.DATE}}
+			 <span class="glyphicon glyphicon-user"></span><B>{{item.SENDER}}</B> | | <span class="smallDate">{{item.DATE}}</span>
 			 
 			 <footer> 
 			 <span ng-hide="item.FileName.length > 0 ">{{item.MESSAGE}}</span> 
@@ -170,22 +192,24 @@
 			  
 				<div ng-hide="isDirectChat">
 					<form ng-submit="sendMessage()">				
-					Message: 
-				<a href="" data-toggle="modal" data-target="#uploadchannelModal">
-				  <span class="glyphicon glyphicon-plus"></span>
-				</a>
-		          <input type="text" ng-model="msg">
-							 <input type="submit" value="send">
+					&nbsp;Message: 
+				
+					  <input type="text" ng-model="msg" style="width: 300px;" >
+								 <input type="submit" value="send">
+					 <a href="" data-toggle="modal" data-target="#uploadchannelModal" ng-click="file='';msg='';up.$submitted=false;">
+					  <span class="glyphicon glyphicon-upload"></span>
+					 </a>
 					</form>
 				</div> 
 				<div ng-show="isDirectChat">					
 					<form ng-submit="sendDirectMessage()">
-					Message: 
-					<a href="" data-toggle="modal" data-target="#uploaddirectModal">
-					  <span class="glyphicon glyphicon-plus"></span>
-					</a>
-					<input type="text" ng-model="msg">
-							 <input type="submit" value="send">
+					&nbsp;Message: 
+						
+						<input type="text" ng-model="msg" style="width: 300px;" >
+						<input type="submit" value="send">
+						<a href="" data-toggle="modal" data-target="#uploadchannelModal" ng-click="up.file='';msg='';up.$submitted=false;">
+						  <span class="glyphicon glyphicon-upload"></span>
+						</a>
 					</form>
 				</div>	
 				<!-- Upload channel Modal -->
@@ -202,7 +226,7 @@
 							<div class="modal-body">				
 								<form  ng-controller="MyCtrl as up" name="up.upload_form">
 								<input type="text" ng-model="displayName" name="receiver" id="rid" >
-								 <h4 class="modal-title">Sending File from {{userName}} to **{{displayName}}** </h4>
+								 <h4 class="modal-title">Sending File from {{userName}} to **{{displayName}}** in {{directmsg}} chat</h4>
 								<input 
 									type="file" 
 									ngf-select 
@@ -211,7 +235,7 @@
 									ngf-pattern="'*'"
 									accept="*" 
 									ngf-max-size="20MB" 
-									/>
+									/><br>
 									Message: <textarea ng-model="msg" width="100%"></textarea>
 							   <!--  Multiple files
 								<div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
@@ -230,50 +254,13 @@
 				</div>
 				<!-- end of upload channel model-->
 				<!-- Upload direct Modal -->
-				<div >
-					<div class="modal fade" id="uploaddirectModal" role="dialog">
-						<div class="modal-dialog">
-
-						  <!-- Modal content-->
-						  <div class="modal-content" >
-							<div class="modal-header">
-							  <button type="button" class="close" data-dismiss="uploaddirectModal">&times;</button>
-							 
-							</div>
-							<div class="modal-body">				
-								<form  ng-controller="MydCtrl as up" name="up.upload_dform">
-								<input type="text" ng-model="displayName" name="receiver" id="rid" >
-								 <h4 class="modal-title">Sending File from {{userName}} to **{{displayName}}** </h4>
-								<input 
-									type="file" 
-									ngf-select 
-									ng-model="up.file" 
-									name="file" 
-									ngf-pattern="'*'"
-									accept="*" 
-									ngf-max-size="20MB" 
-									/>
-								Message: <textarea ng-model="msg" width="100%"></textarea>
-							   <!--  Multiple files
-								<div class="button" ngf-select ng-model="up.files" ngf-multiple="true">Select</div>
-								Drop files: <div ngf-drop ng-model="up.files" class="drop-box">Drop</div> -->
-								<button type="submit" ng-click="up.submit()">submit</button>
-								<p>{{up.progress}}</p>
-							</form>		
-							</div>
-							<div class="modal-footer">
-							  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-							</div>
-						  </div>
-						  
-						</div>
-					</div>
-				</div>
+				
 				</br>	
 		   </div>
 		   </td>
 		 </tr>
        </table>
+	   
 	</td>
 
 

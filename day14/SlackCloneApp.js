@@ -91,6 +91,10 @@ app.post('/Cupload/', function(req, res) {
 		//-- string the timestamp together
 		var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
 		var filename = req.file.filename;
+		var chattext = req.body.chatvalue;
+		console.log(chattext);
+		if (chattext ==='channel')
+		{
 		slackdb.insertUploadChannelChat(db, message, channel, user, today,filename).then( //done);
 			function(val) {
 				console.log('****/message/, val ' + val + '*');
@@ -104,6 +108,23 @@ app.post('/Cupload/', function(req, res) {
 					 return;
 			}
 		);
+		} else if(chattext ==='direct')
+		{
+			
+			slackdb.insertUploadDirectChat(db, user,channel,message, today,filename).then( //done);
+			function(val) {
+				console.log('****/message/, val ' + val + '*');
+				//json
+				res.json({error_code:0,err_desc:null});
+
+			},
+			function(err) {
+				res.status(500);
+				res.json({error_code:1,err_desc:err});
+					 return;
+			}
+		);
+		}
 			// if(err){
 				 // res.json({error_code:1,err_desc:err});
 				 // return;
@@ -166,11 +187,11 @@ app.post('/Dupload/', function(req, res) {
 			}
 		);
 			
-		if(err){
-			 res.json({error_code:1,err_desc:err});
-			 return;
-		}
-		 res.json({error_code:0,err_desc:null});
+		// if(err){
+			 // res.json({error_code:1,err_desc:err});
+			 // return;
+		// }
+		 // res.json({error_code:0,err_desc:null});
 	});
 });
 //app.set('views', __dirname + '/views');
@@ -499,7 +520,7 @@ function getSearchMsgResults(req, res) {
     //			var tweets =  getFollowedTweets(req.params.userid );
     // res.send(str+ getFollowedTweets(req.params.userid ).toString());
     console.log('in getSearchMsgResults, searchKeyword=' + searchKeyword);
-    searchMsgUser.searchChannelMsgJSONPromisePublic(db, searchKeyword).then( //done);
+    searchMsgUser.searchChannelMsgJSONPromisePublic(db, searchKeyword, userName).then( //done);
         function(val) {
             console.log('**** in getSearchMsgResults, searchChannelMsgJSONPromisePublic, val ' + val + '*');
             //json

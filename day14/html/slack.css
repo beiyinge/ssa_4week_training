@@ -1,9 +1,8 @@
 
-
 .leftMenuBKGrnd {
     color: #ffffff;
     text-align: left;
-	background-color:#80609f
+	background-color:#F0FFFF    /* azure */
 }
 
 .centerMenuBKGrnd {
@@ -16,7 +15,27 @@
     color: black;
     text-align: left;
 	font-size: 10px;
-	
+    background-color:#FFFFCC    /* custom color */
+}
+
+
+.blank {
+    background-color:#FFFFFF;   /* white */    
+    line-height: 30%;
+}
+
+
+.footerMessage {
+    background-color:#F6F6F6;   /* custom color */
+	font-family: Arial, Helvetica, sans-serif;
+}
+
+.smallDate {
+    font-size: 75%;
+}
+
+.right {
+    padding-left:20px; 
 }
 
 .rightMenuBKGrnd {
