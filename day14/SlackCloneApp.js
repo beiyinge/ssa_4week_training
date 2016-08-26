@@ -303,7 +303,7 @@ app.post('/saveDirectMessage/', function(req, res) {
         },
         function(err) {
             res.status(500);
-            res.send('Could not insert direct message: ' + message);
+            res.send('Could not insert direct message: ' + err);
         }
 
 
@@ -347,8 +347,8 @@ app.post('/createTeam/', function(req, res) {
     //-- string the timestamp together
     var today = yyyy + '-' + mm + '-' + dd + ' ' + hour + ':' + minute + ':' + second;
 
-
-    slackdb.createTeam(db, name, desc, user, today).then( 
+    var p = slackdb.createTeam(db, name, desc, user, today);
+    p.then( 
         function(val) {
             console.log('****/createTeam/, val ' + val + '*' + ' inserted new team: ' + name);
             //json
@@ -357,7 +357,9 @@ app.post('/createTeam/', function(req, res) {
         },
         function(err) {
             res.status(500);
-            res.send('Could not create a team: ' + name);
+            res.send(err);
+			//console.log("err="+err);
+			//res.send(JSON.stringify(err));
         }
 
 

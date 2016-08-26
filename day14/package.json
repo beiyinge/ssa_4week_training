@@ -11,7 +11,10 @@
     "express": "^4.14.0",
     "moment": "^2.14.1",
     "multer": "^1.2.0",
+<<<<<<< HEAD
     "ng-file-upload": "^12.2.3",
+=======
+>>>>>>> 1c3c063be26451df12941e6a381d33e613acb3b1
     "q": "^1.4.1",
     "sqlite3": "^3.1.4"
   },
@@ -19,7 +22,8 @@
     "mocha": "^3.0.2"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "node SlackCloneApp.js"
   },
   "author": "",
   "license": "ISC"
