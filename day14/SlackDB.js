@@ -203,22 +203,91 @@ exports.insertChannelChat = function  (db, message, toChannel, fromUser, today) 
   
 }
 
-exports.createTeam = function  (db, name, desc, user, today) {
-	
-	 var insertTeamSql = "INSERT INTO TEAM (TEAMNAME, DESCR, CREATED_USER, DATE) " +
-    "VALUES ('" + name + "','" + desc +"', '" + user + "','" + today +  "');";
-	 console.log("insertTeamSql="+insertTeamSql);
-	 return new Promise(function(resolve, reject) {
-			db.run(insertTeamSql, function(err){
-				if (err) {
-					reject(err);
-				}
+exports.insertDirectChat = function  (db, message, sender, receiver, today) {
+
+	 var insertDirectChatSql = "INSERT INTO DIRECT_CHAT (SENDER, RECIEVER, MESSAGE, DATE) " +
+    "VALUES ('" + sender + "','" + receiver +"', '"+ message + "','" + today + "');";
+	 
+ 	 return new Promise(function(resolve, reject) {
+			db.run(insertDirectChatSql, function(err){
+ 				if (err) {
+ 					reject(err);
+ 				}					
 				resolve(); 
 			});
  
 	 });
- 
   
+}
+
+
+
+getTeam = function  (db, name) {
+	
+	 var getTeamSql = "SELECT TEAMNAME, DESCR, CREATED_USER, DATE FROM TEAM WHERE TEAMNAME='" + name + "';";
+	 var teams = [];
+	 console.log("getTeamSql="+getTeamSql);
+	 return new Promise(function(resolve, reject) {
+			db.each(getTeamSql, 
+					function(err, row) {
+	                	if (err){
+	                		reject(err);
+	                	}
+	                	else{
+	                		teams.push(row);
+	                	}
+	                },
+	                function (err) {
+	                	if (err){
+	                		reject(err);
+	                	}
+	                	else{
+	                		resolve(teams);
+	                	}	                    
+	                }
+			)
+	});
+}
+
+exports.createTeam = function  (db, name, desc, user, today) {
+	
+	return getTeam(db, name).then( 
+        function(val) {
+            console.log('****/getTeam/, val=' + val + '*' + ' for team: ' + name);
+			
+			if (val.length===0) {
+				var insertTeamSql = "INSERT INTO TEAM (TEAMNAME, DESCR, CREATED_USER, DATE) " +
+				"VALUES ('" + name + "','" + desc +"', '" + user + "','" + today +  "');";
+				console.log("insertTeamSql="+insertTeamSql);
+				
+				
+				return new Promise(function(resolve, reject) {
+					db.run(insertTeamSql, function(err){
+						if (err) {
+							reject(err);
+						}
+						resolve(); 
+					});
+
+				});
+			} else {
+				return new Promise(function(resolve, reject){
+					console.log("duplicate team name");
+					reject("Team " + name + " already exists.");
+				});
+			}   
+            
+
+        },
+        function(err) {
+			return new Promise(function(resolve, reject){
+				reject(err);
+			});
+
+        }
+
+    );	
+ 
 }
 	
 var globleData=[];

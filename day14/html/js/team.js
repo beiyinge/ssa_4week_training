@@ -20,19 +20,21 @@ menuApp.controller('teamCtrl', function ($scope, $routeParams, teamService){
 
 	$scope.isDisabled = false;
 	$scope.success = false;
+	$scope.failure = false;
 	
 	$scope.update = function() {
 		console.log('update team: ' + $scope.name);
 		teamService.update($scope.name, $scope.desc, getCookie("UserName"),
 		(response) => {
-			console.log('teamService call successful: ' + response);
+			console.log('teamService call successful: ' + response.data);
 			//$scope.name = '';
 			//$scope.desc = '';
 			$scope.isDisabled = true;
-			$scope.success = true;
+			$scope.serverMsg = response.data;
 		},
 		(error) => {
-			console.log("Error: server failed to add team " + $scope.name);
+			$scope.serverMsg = error.data;
+			console.log("Error: server failed to add team " + $scope.name + ":" + error.data);
 		});
 	};
 

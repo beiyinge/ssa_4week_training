@@ -35,7 +35,7 @@
 	<div ng-controller="teamCtrl">	
 		<div id="myRightSidenav" class="rightSidenav" align="left">
 			<a href="javascript:void(0)" class="closebtn" onclick="closeRightNav()">&times;</a>		  
-			<a href="" data-toggle="modal" data-target="#myModal" ng-click="success=false;name='';desc='';isDisabled=false;form.$submitted=false;form.uName.$touched=false;">Create Team</a> 
+			<a href="" data-toggle="modal" data-target="#myModal" ng-click="serverMsg='';name='';desc='';isDisabled=false;form.$submitted=false;form.uName.$touched=false;">Create Team</a> 
 			<a href="#/logout/">SignOut</a>
   
 		</div> 
@@ -50,7 +50,7 @@
 				  <button type="button" class="close" data-dismiss="modal">&times;</button>
 				  <h4 class="modal-title">Create a Team</h4>
 				</div>
-				<div ng-show="success">Team {{name}} is created successfully.</div>
+				<div>{{serverMsg}}</div>
 				<div class="modal-body">				
 					<form name="form" novalidate class="simple-form" ng-submit="form.$valid && update()" >
 					
@@ -145,7 +145,6 @@
 		
 	</td>	
 	<td width="70%" valign=top>
-	<div ng-scrollable="{scrollX:'none',scrollY:'right'}" style="width: 100%; height: 600px;">
 		<table valign=top width="100%" border=0>
 		  <tr>
 		    <td>
@@ -205,7 +204,6 @@
 		   </td>
 		 </tr>
        </table>
-	   </div>
 	</td>
 
 

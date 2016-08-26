@@ -66,7 +66,7 @@ menuApp.factory('logout', function($http) {
             console.log(userName +" loggingout");
             $http({
                 method: 'GET',
-                url: 'http://localhost:8080/' + userName,
+                url: '/' + userName,
                 cache: true
             }).success(callback);
         }
@@ -91,7 +91,7 @@ menuApp.factory('logon', function($http) {
             console.log(userName +" logging in");
             $http({
                 method: 'GET',
-                url: 'http://localhost:8080/' + userName,
+                url: '/' + userName,
                 cache: false
             }).success(callback);
         }
@@ -150,7 +150,7 @@ menuApp.factory('channels', function($http) {
 		directList: function (userName, callback){
 			$http({
 			  method: 'GET',
-			  url:    'http://localhost:8080/direct/'+ userName,
+			  url:    '/direct/'+ userName,
 			  cache: false
 			}).success(callback);
 		}
@@ -191,7 +191,7 @@ menuApp.factory('dataService', function($http) {
 
 
 
-var getMenuCtrl = function($scope, channels, $routeParams) {
+var getMenuCtrl = function($scope, channels, $routeParams, $location) {
     count = count + 1;
     console.log(count + ', in getMenu function, userName=' + getCookie("UserName"));
 	console.log(myChannelList.length);
@@ -208,7 +208,7 @@ var getMenuCtrl = function($scope, channels, $routeParams) {
 				teamSet.add(channels[i].TEAMNAME);
 			}
 			$scope.teams = Array.from(teamSet);
-			teamList = $scope.teams;
+			teamList = $scope.teams;			
         });
 		
 		
@@ -238,6 +238,8 @@ var getMenuCtrl = function($scope, channels, $routeParams) {
 			console.log("sends from menu ctrl direct"+ getCookie("UserName"));
 		});
 	}
+	//console.log("location.path=" +"/channelChats/"+ myChannelList[0].CHANNELNAME);
+	$location.path("/channelChats/A_channel");
 
 }
 
@@ -262,7 +264,7 @@ menuApp.factory('channelChats', function($http) {
 });
 
 
-menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParams, $rootScope, dataService,channels) {
+menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParams, $rootScope, dataService,channels,$location) {
     count = count + 1;
     console.log(count + ', in ChatMessageCtrl, ' + $routeParams.channelName);
     $scope.displayName = $routeParams.channelName;
@@ -273,7 +275,7 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
 	 {
 		 console.log("inside");
 		 console.log("sends from chat controller  "+ getCookie("UserName"));
-              getMenuCtrl($scope,channels,$routeParams);
+              getMenuCtrl($scope,channels,$routeParams, $location);
 		 console.log("outside");
 	 }
     channelChats.list($routeParams.channelName, function(channelChats) {
@@ -319,10 +321,10 @@ menuApp.controller('ChatMessageCtrl', function($scope, channelChats, $routeParam
 menuApp.factory('messages', function($http){
 	 return {
 	  list: function (channelName, userName, callback){
-	  console.log ('url='+ 'http://localhost:8080/message/' + channelName + '/' + userName);
+	  console.log ('url='+ '/message/' + channelName + '/' + userName);
 		$http({
 		  method: 'GET',
-		  url:    'http://localhost:8080/message/' + channelName + '/' + userName,
+		  url:    '/message/' + channelName + '/' + userName,
 		  cache: false
 		}).success(callback);
 	  }
